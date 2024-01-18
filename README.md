@@ -1,7 +1,7 @@
 <h1 align="center">Hi 👋, I'm Swayam Mahadev Patil</h1>
 <h3 align="center">A Passionate Learner and Developer from India</h3>
 
-- 🌱 I’m currently learning **Java**
+- 🌱 I’m currently learning **Machine Learning**
 
 - 📝 I regularly write articles on [https://www.trendyblogs.online/](https://www.trendyblogs.online/)
 
