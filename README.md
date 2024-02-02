@@ -1,4 +1,4 @@
-<h1 align="center">Hi 👋, I'm Swayam Mahadev Patil</h1>
+<h1 align="center">Hi 👋, I'm Swayam Patil</h1>
 <h3 align="center">🌐Web Developer | 💻Data Analyst | 📊Data Science & Machine Learning Enthusiast</h3>
 
 - 📫 How to reach me **patilswayam96@gmail.com**
