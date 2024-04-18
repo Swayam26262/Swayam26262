@@ -7,7 +7,7 @@
 <p align="left">
 <a href="https://www.linkedin.com/in/swayam-patil-5a5b9721b/" target="blank"><img align="center" src="https://raw.githubusercontent.com/rahuldkjain/github-profile-readme-generator/master/src/images/icons/Social/linked-in-alt.svg" alt="https://www.linkedin.com/in/swayam-patil-5a5b9721b/" height="30" width="40" /></a>
 <a href="https://kaggle.com/swayammp" target="blank"><img align="center" src="https://raw.githubusercontent.com/rahuldkjain/github-profile-readme-generator/master/src/images/icons/Social/kaggle.svg" alt="https://www.kaggle.com/swayammp" height="30" width="40" /></a>
-<a href="https://www.leetcode.com/swayamop/" target="blank"><img align="center" src="https://raw.githubusercontent.com/rahuldkjain/github-profile-readme-generator/master/src/images/icons/Social/leet-code.svg" alt="https://leetcode.com/swayamop/" height="30" width="40" /></a>
+<a href="https://www.leetcode.com/swayamP/" target="blank"><img align="center" src="https://raw.githubusercontent.com/rahuldkjain/github-profile-readme-generator/master/src/images/icons/Social/leet-code.svg" alt="https://leetcode.com/swayamop/" height="30" width="40" /></a>
 </p>
 
 <h3 align="left">Languages and Tools:</h3>
