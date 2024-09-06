@@ -1,5 +1,5 @@
 <h1 align="center">Hi 👋, I'm Swayam Patil</h1>
-<h3 align="center">🌐Python Developer | 💻Data Analyst | 📊Data Science & Machine Learning Enthusiast</h3>
+<h3 align="center">🌐Python Developer | 📊Ai & Machine Learning Enthusiast | 💻Data Analyst</h3>
 
 - 📫 How to reach me **patilswayam96@gmail.com**
 
