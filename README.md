@@ -1,9 +1,12 @@
-<h1 align="center">Hi 👋, I'm Swayam Mahadev Patil</h1>
-<h3 align="center">🌐Python Developer |📊AI & Machine Learning Enthusiast | 💻Data Analyst</h3>
+<h1 align="center">Hi 👋, I'm Swayam Patil</h1>
+<h3>I'm a Full Stack Developer skilled in Django and React, with a deep passion for Artificial Intelligence and Machine Learning. My journey in tech has been all about turning complex problems into streamlined solutions, whether it's through dynamic web applications or insightful data-driven models. I thrive at the intersection of backend engineering and frontend design, using Python to craft efficient, scalable code. When I’m not coding, you’ll find me exploring new AI trends, improving my problem-solving on LeetCode, or diving into datasets on Kaggle. Let’s connect and create something amazing!</h3>
 
-<p align="left"> <a href="https://github.com/ryo-ma/github-profile-trophy"><img src="https://github-profile-trophy.vercel.app/?username=swayam26262" alt="swayam26262" /></a> </p>
 
-- 💬 Ask me about **Python, SQL, AI/ML**
+<p align="left"> <a href="https://github.com/ryo-ma/github-profile-trophy"><img src="https://github-profile-trophy.vercel.app/?username=swayam26262&theme=onedark" alt="swayam26262" /></a> </p>
+
+- 🌐 Full Stack Developer with a Passion for AI & Machine Learning
+
+- 💬 Ask me about **Python Full Stack, Databases, AI/ML**
 
 - 📫 How to reach me **patilswayam96@gmail.com**
 
