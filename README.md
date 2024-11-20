@@ -1,6 +1,6 @@
-<h1 align="center">Hi 👋, I'm Swayam Patil</h1>
-<h3>I'm a Full Stack Developer skilled in Django and React, with a deep passion for Artificial Intelligence and Machine Learning. My journey in tech has been all about turning complex problems into streamlined solutions, whether it's through dynamic web applications or insightful data-driven models. I thrive at the intersection of backend engineering and frontend design, using Python to craft efficient, scalable code. When I’m not coding, you’ll find me exploring new AI trends, improving my problem-solving on LeetCode, or diving into datasets on Kaggle. Let’s connect and create something amazing!</h3>
-
+<h2 align="center">Hi 👋, I'm Swayam Patil</h2>
+<h4 align='center'>I'm a Full Stack Developer specializing in Django and React, with a passion for AI and ML. I enjoy building dynamic web apps and crafting efficient solutions with Python. Outside work, I explore AI trends, tackle LeetCode challenges, and analyze datasets on Kaggle. Let’s create something amazing!</h3>
+<br>
 
 <p align="left"> <a href="https://github.com/ryo-ma/github-profile-trophy"><img src="https://github-profile-trophy.vercel.app/?username=swayam26262&theme=onedark" alt="swayam26262" /></a> </p>
 
