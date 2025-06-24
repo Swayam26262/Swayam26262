@@ -103,7 +103,7 @@ class SwayamPatil:
   <a href="https://swayampatil.vercel.app" target="_blank">
     <img src="https://img.shields.io/badge/Portfolio-000000?style=for-the-badge&logo=vercel&logoColor=white" alt="Portfolio"/>
   </a>
-  <a href="https://leetcode.com/swayamop/" target="_blank">
+  <a href="https://leetcode.com/SwayamP/" target="_blank">
     <img src="https://img.shields.io/badge/LeetCode_Profile-FFA116?style=for-the-badge&logo=leetcode&logoColor=white" alt="LeetCode"/>
   </a>
 </div>
