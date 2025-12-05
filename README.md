@@ -31,41 +31,57 @@ class SwayamPatil:
     def __init__(self):
         self.role = "Software Developer"
         self.location = "Maharashtra, India"
-        self.work = "Infosys Springboard"
+        self.work = "GoParkEasy"
         self.education = "Btech - Computer Science <3"
-        self.interests = ["AI/ML", "Software Development", "Python"]
+        self.interests = ["Software Development", "Python", "AI/ML"]
+
+    @property
+    def skills(self):
+        return {
+            "languages": ["Python", "JavaScript", "TypeScript", "SQL"],
+            "frontend": ["React", "Next.js", "Tailwind CSS", "HTML/CSS", "Bootstrap"],
+            "backend": ["Node.js", "Express.js", "Django", "REST APIs", "PostgreSQL", "MongoDB"],
+            "interests": ["AI/ML", "Web Dev", "Open Source", "Full Stack Development"]
+        }
     
-    def say_hi(self):
-        print("Thanks for dropping by! Let's build something amazing together!")
+    def current_focus(self):
+        return "Building scalable web apps & exploring AI"
+    
+    def life_motto(self):
+        return "Code. Learn. Repeat. 🚀"
 ````
 
 ---
+## <img src="https://raw.githubusercontent.com/Tarikul-Islam-Anik/Animated-Fluent-Emojis/master/Emojis/Objects/Hammer%20and%20Wrench.png" alt="Tools" width="28" /> Tech Stack
 
-## 🛠️ Tech Stack
+<div align="center">
 
-### Languages
+<!-- Languages -->
+<h4>Languages</h4>
+<p>
+  <img src="https://skillicons.dev/icons?i=python,javascript,typescript,html,css" />
+</p>
 
-![Python](https://img.shields.io/badge/Python-3776AB?style=for-the-badge\&logo=python\&logoColor=white)
-![JavaScript](https://img.shields.io/badge/JavaScript-F7DF1E?style=for-the-badge\&logo=javascript\&logoColor=black)
-![SQL](https://img.shields.io/badge/SQL-003B57?style=for-the-badge\&logo=sqlite\&logoColor=white)
-![HTML](https://img.shields.io/badge/HTML-E34F26?style=for-the-badge\&logo=html5\&logoColor=white)
-![CSS](https://img.shields.io/badge/CSS-1572B6?style=for-the-badge\&logo=css3\&logoColor=white)
+<!-- Frontend -->
+<h4>Frontend</h4>
+<p>
+  <img src="https://skillicons.dev/icons?i=react,nextjs,tailwind,bootstrap" />
+</p>
 
-### Frameworks & Libraries
+<!-- Backend -->
+<h4>Backend & Database</h4>
+<p>
+  <img src="https://skillicons.dev/icons?i=django,nodejs,express,postgresql,mongodb" />
+</p>
 
-![Django](https://img.shields.io/badge/Django-092E20?style=for-the-badge\&logo=django\&logoColor=white)
-![React](https://img.shields.io/badge/React-20232A?style=for-the-badge\&logo=react\&logoColor=61DAFB)
-![Tailwind CSS](https://img.shields.io/badge/Tailwind-38B2AC?style=for-the-badge\&logo=tailwind-css\&logoColor=white)
+<!-- Tools -->
+<h4>Tools & Platforms</h4>
+<p>
+  <img src="https://skillicons.dev/icons?i=git,github,vscode,postman,vercel" />
+</p>
 
-### Tools & Platforms
+</div>
 
-![Git](https://img.shields.io/badge/Git-F05032?style=for-the-badge\&logo=git\&logoColor=white)
-![GitHub](https://img.shields.io/badge/GitHub-181717?style=for-the-badge\&logo=github\&logoColor=white)
-![VSCode](https://img.shields.io/badge/VS%20Code-007ACC?style=for-the-badge\&logo=visual-studio-code\&logoColor=white)
-![Postman](https://img.shields.io/badge/Postman-FF6C37?style=for-the-badge\&logo=postman\&logoColor=white)
-![Render](https://img.shields.io/badge/Render-46E3B7?style=for-the-badge\&logo=render\&logoColor=black)
-
----
 
 ## 📊 GitHub Stats
 
@@ -76,10 +92,11 @@ class SwayamPatil:
 
 ---
 
-## 🏆 GitHub Achievements
+<!-- Trophies Section -->
+## <img src="https://raw.githubusercontent.com/Tarikul-Islam-Anik/Animated-Fluent-Emojis/master/Emojis/Activities/Trophy.png" alt="Trophy" width="28" /> GitHub Trophies
 
 <div align="center">
-  <img src="https://github-profile-trophy.vercel.app/?username=Swayam26262&theme=monokai&no-frame=true&margin-w=15" />
+  <img src="https://github-profile-trophy.vercel.app/?username=Swayam26262&theme=discord&no-frame=true&no-bg=true&column=7&margin-w=10" />
 </div>
 
 ---
@@ -88,6 +105,17 @@ class SwayamPatil:
 
 <div align="center">
   <img src="https://github-readme-activity-graph.vercel.app/graph?username=Swayam26262&theme=tokyo-night&bg_color=0d1117&hide_border=true" />
+</div>
+
+---
+
+<!-- LeetCode Stats -->
+## <img src="https://raw.githubusercontent.com/Tarikul-Islam-Anik/Animated-Fluent-Emojis/master/Emojis/Objects/Abacus.png" alt="Abacus" width="28" /> Coding Profiles
+
+<div align="center">
+  <a href="https://leetcode.com/SwayamP/">
+    <img src="https://leetcard.jacoblin.cool/SwayamP?theme=dark&font=Fira%20Code&ext=heatmap" width="495"/>
+  </a>
 </div>
 
 ---
@@ -110,4 +138,4 @@ class SwayamPatil:
 
 ---
 
-> ⭐ *This README was handcrafted with passion and coffee by Swayam Patil*
+> ⭐ *README by Swayam Patil*
