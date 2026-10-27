@@ -62,13 +62,13 @@ def render(profile: dict, theme: Theme, live: dict | None = None, today=None) ->
         f'<g clip-path="url(#p)"><rect width="{W}" height="{H}" fill="url(#bg)"/>'
         f'<ellipse class="au" cx="{W / 2}" cy="40" rx="320" ry="120" fill="url(#a)"/>{waves}</g>'
         f'<rect x=".5" y=".5" width="{W - 1}" height="{H - 1}" rx="19.5" stroke="{theme.border}"/>'
-        f'<g class="fi" style="animation-delay:.2s">'
+        '<g class="fi" style="animation-delay:.2s">'
         + text(W / 2, 64, foot["headline"], "d", fill="url(#hg)", size=26, anchor="middle")
         + "</g>"
-        + f'<g class="fi" style="animation-delay:.5s">'
+        + '<g class="fi" style="animation-delay:.5s">'
         + text(W / 2, 94, foot["line"], "s", fill=theme.muted, size=14, anchor="middle")
         + "</g>"
-        + f'<g class="fi" style="animation-delay:.8s">'
+        + '<g class="fi" style="animation-delay:.8s">'
         + f'<path class="hb" d="M{num(heart_x)} {H - 77}c-2-3-7-2.5-7 1.5 0 3 4 5.5 7 8 3-2.5 7-5 7-8 0-4-5-4.5-7-1.5Z" '
           f'fill="{theme.pink}"/>'
         + text(W / 2 + 8, H - 70, foot["note"], "m", fill=theme.faint if theme.dark else theme.muted, size=10,

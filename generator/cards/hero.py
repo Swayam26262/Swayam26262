@@ -9,7 +9,7 @@ import random
 from core import fonts
 from core.icons import icon
 from core.motion import BLINK_CSS, TypedLine, typing_cycle
-from core.svg import document, esc, num, text
+from core.svg import document, num, text
 from core.theme import Theme
 
 W, H = 840, 320

@@ -13,7 +13,6 @@ import re
 import urllib.parse
 from pathlib import Path
 
-from core import fonts
 from core.svg import document, num, text
 from core.theme import THEMES, Theme
 

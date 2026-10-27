@@ -119,5 +119,5 @@
 </a>
 
 <p align="center">
-  <sub>This page is a program: the artwork is rendered by <a href="generator">generator/</a> and refreshed daily by <a href=".github/workflows/profile.yml">a GitHub Action</a>.</sub>
+  <sub>This page is a program: the artwork is rendered by <a href="https://github.com/Swayam26262/Swayam26262/tree/main/generator">generator/</a> and refreshed daily by <a href="https://github.com/Swayam26262/Swayam26262/blob/main/.github/workflows/profile.yml">a GitHub Action</a>.</sub>
 </p>

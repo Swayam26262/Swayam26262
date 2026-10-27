@@ -9,7 +9,7 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
 from connect4 import engine, game, play  # noqa: E402
-from connect4.engine import AI, HUMAN, Board, choose  # noqa: E402
+from connect4.engine import HUMAN, Board, choose  # noqa: E402
 
 
 class EngineTest(unittest.TestCase):

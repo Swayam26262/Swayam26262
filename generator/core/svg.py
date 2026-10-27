@@ -50,19 +50,6 @@ def fit(cls: str, content: str, size: float, max_width: float, tracking: float =
     return size
 
 
-def wrap(cls: str, content: str, size: float, max_width: float) -> list[str]:
-    """Greedy word wrap using real glyph advances."""
-    lines, line = [], ""
-    for word in content.split():
-        trial = f"{line} {word}".strip()
-        if line and fonts.width(cls, trial, size) > max_width:
-            lines.append(line)
-            line = word
-        else:
-            line = trial
-    return lines + [line] if line else lines
-
-
 def balance(cls: str, content: str, size: float, max_width: float) -> list[str]:
     """One line if it fits, otherwise two lines of similar length (no lonely last word)."""
     if fonts.width(cls, content, size) <= max_width:

@@ -207,7 +207,7 @@ def card(project: dict, theme: Theme) -> str:
         icon(project["icon"], PAD + 11, PAD + 11, 22, theme, color="#ffffff", stroke_width=2.1),
     ]
     title_size = 19 if fonts.width("d", project["name"], 19) < W - 2 * PAD - 160 else 17
-    out.append(f'<g class="in" style="animation-delay:.1s">'
+    out.append('<g class="in" style="animation-delay:.1s">'
                + text(PAD + 58, PAD + 20, project["name"], "d", fill=theme.text, size=title_size)
                + text(PAD + 58, PAD + 39, project["kind"].upper(), "m", fill=color, size=9.5, letter_spacing="1.3")
                + "</g>")
