@@ -100,19 +100,25 @@ def months(calendar: list, theme: Theme, x0: float, oy: float) -> str:
     return "".join(out)
 
 
-def kpis(gh: dict, theme: Theme, y: float) -> tuple[str, str]:
+def kpis(gh: dict, lc: dict | None, theme: Theme, y: float) -> tuple[str, str]:
     s = gh["streak"]
-    joined = dt.datetime.fromisoformat(gh["created_at"].replace("Z", "+00:00")).strftime("%b %Y")
     best = ""
     if s.get("longest_range"):
         a, b = (dt.date.fromisoformat(x) for x in s["longest_range"])
         best = f"{a:%b %d} → {b:%b %d, %Y}"
+    year = dt.datetime.fromisoformat(gh["fetched_at"]).year
+    streak_sub = f"running now: {s['current']} days" if s["current"] >= 2 else best
     items = [
         (f"{gh['contributions_last_year']:,}", "", "CONTRIBUTIONS · 12 MO", f"{gh['active_days_last_year']} active days", theme.cyan),
-        (str(s["current"]), " days" if s["current"] != 1 else " day", "CURRENT STREAK", "keep it going", theme.green),
-        (str(s["longest"]), " days" if s["longest"] != 1 else " day", "LONGEST STREAK", best, theme.amber),
-        (f"{gh['commits_total']:,}", "", "COMMITS · ALL-TIME", f"since {joined}", theme.pink),
+        (str(s["longest"]), " days" if s["longest"] != 1 else " day", "LONGEST STREAK", streak_sub, theme.amber),
+        (f"{gh['commits_total']:,}", "", "COMMITS · ALL-TIME", f"{gh['commits_year']:,} in {year}", theme.pink),
     ]
+    if lc:
+        sv = lc["solved"]
+        items.append((str(sv.get("All", 0)), "", "LEETCODE SOLVED",
+                      f"E {sv.get('Easy', 0)} · M {sv.get('Medium', 0)} · H {sv.get('Hard', 0)}", theme.green))
+    else:
+        items.append((str(gh["public_repos"]), "", "PUBLIC REPOS", f"{gh['stars']} stars earned", theme.green))
     col = (W - 2 * PAD) / len(items)
     defs, body = [], []
     size = 26
@@ -135,7 +141,17 @@ def kpis(gh: dict, theme: Theme, y: float) -> tuple[str, str]:
     return "".join(defs), "".join(body)
 
 
+def fold_small(langs: list[dict], minimum: float = 1.0) -> list[dict]:
+    """Merge languages under `minimum` percent into "Other"."""
+    keep = [lang for lang in langs if lang["pct"] >= minimum and lang["name"] != "Other"]
+    rest = round(sum(lang["pct"] for lang in langs) - sum(lang["pct"] for lang in keep), 1)
+    if rest > 0:
+        keep.append({"name": "Other", "color": "#8b949e", "pct": rest})
+    return keep
+
+
 def languages(langs: list[dict], theme: Theme, y: float) -> tuple[str, float]:
+    langs = fold_small(langs)
     x0, width = PAD, W - 2 * PAD
     out = [text(PAD, y, "TOP LANGUAGES", "m", fill=theme.muted, size=9.5, letter_spacing="1.2"),
            text(W - PAD, y, "by bytes across public repos", "s", fill=theme.faint if theme.dark else theme.muted,
@@ -186,7 +202,7 @@ def render(profile: dict, theme: Theme, live: dict | None = None, today=None) ->
     header.append(text(W - PAD, 33.5, f"SYNCED {stamp}", "m", fill=th.faint, size=9.5, anchor="end", letter_spacing="1"))
     header.append(f'<path d="M{PAD} 52H{W - PAD}" stroke="{th.border}"/>')
 
-    kdefs, kbody = kpis(gh, th, 112)
+    kdefs, kbody = kpis(gh, (live or {}).get("leetcode"), th, 112)
 
     weeks = len(gh["calendar"])
     sky_w = (weeks - 1) * S + 6 * DX + S * TW + DX * TD

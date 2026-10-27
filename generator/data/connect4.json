@@ -1,0 +1,15 @@
+{
+ "game": 1,
+ "last": null,
+ "movers": {},
+ "moves": [],
+ "players": [],
+ "processed": [],
+ "score": {
+  "ai": 0,
+  "draws": 0,
+  "humans": 0
+ },
+ "status": "playing",
+ "winners": []
+}

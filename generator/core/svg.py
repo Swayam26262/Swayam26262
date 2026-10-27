@@ -100,18 +100,26 @@ def document(body: str, width: float, height: float, *, title: str, desc: str = 
     w, h = num(width), num(height)
     return (
         f'<svg xmlns="http://www.w3.org/2000/svg" width="{w}" height="{h}" viewBox="0 0 {w} {h}" '
-        f'role="img" aria-labelledby="t d" fill="none">'
-        f'<title id="t">{esc(title)}</title><desc id="d">{esc(desc or title)}</desc>'
+        f'role="img" aria-labelledby="svg-title svg-desc" fill="none">'
+        f'<title id="svg-title">{esc(title)}</title><desc id="svg-desc">{esc(desc or title)}</desc>'
         f"<style>{faces}{BASE_CSS}{css}</style>"
         f"{f'<defs>{defs}</defs>' if defs else ''}"
         f"{body}</svg>\n"
     )
 
 
+_FONT_DATA = re.compile(r"base64,[A-Za-z0-9+/=]+")
+
+
 def write(path: Path, svg: str) -> bool:
-    """Write only when content changed. Returns True if the file was updated."""
+    """Write only when content changed. Returns True if the file was updated.
+
+    Embedded WOFF2 bytes differ between brotli builds even for identical glyphs,
+    so font payloads are ignored when deciding whether anything changed (the
+    glyph set itself is derived from the visible text, which is compared).
+    """
     path.parent.mkdir(parents=True, exist_ok=True)
-    if path.exists() and path.read_text() == svg:
+    if path.exists() and _FONT_DATA.sub("", path.read_text()) == _FONT_DATA.sub("", svg):
         return False
     path.write_text(svg)
     return True

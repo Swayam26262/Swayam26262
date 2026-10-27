@@ -73,7 +73,10 @@ def neofetch_rows(profile: dict, live: dict, today: dt.date) -> list[tuple[str, 
         rows.append(("Commits", f"**{gh['commits_total']:,}** all-time · **{gh['commits_year']:,}** in {today.year}"))
         rows.append(("Activity", f"**{gh['contributions_last_year']:,}** contributions in the last year"))
         s = gh["streak"]
-        rows.append(("Streak", f"**{s['current']}** day{'s' * (s['current'] != 1)} running · best **{s['longest']}**"))
+        if s["current"] >= 2:
+            rows.append(("Streak", f"**{s['current']}** days running · best **{s['longest']}**"))
+        else:
+            rows.append(("Streak", f"best **{s['longest']}** days in a row"))
         rows.append(("Social", f"**{gh['followers']}** followers · **{gh['following']}** following"))
     lc = live.get("leetcode")
     if lc:

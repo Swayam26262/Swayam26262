@@ -1,0 +1,37 @@
+name: Connect Four
+
+# Visitors play by opening an issue titled "c4|drop|<column>" (the column
+# buttons in the README pre-fill it). This drops their disc, lets the AI reply,
+# redraws the board in the README, then answers and closes the issue.
+on:
+  issues:
+    types: [opened]
+
+permissions:
+  contents: write
+  issues: write
+
+concurrency:
+  group: connect4
+  cancel-in-progress: false
+
+jobs:
+  move:
+    if: startsWith(github.event.issue.title, 'c4|')
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+          cache: pip
+          cache-dependency-path: generator/requirements.txt
+
+      - run: pip install -r generator/requirements.txt
+
+      - name: Play pending moves
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: python generator/connect4/play.py
