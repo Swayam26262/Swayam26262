@@ -1,0 +1,278 @@
+# Everything the README artwork says about me lives here.
+# Edit, push to main, and the "Profile refresh" workflow rebuilds every SVG.
+
+[person]
+name = "Swayam Patil"
+github = "Swayam26262"
+role = "Full-Stack & AI Engineer"
+company = "GoParkEasy"
+location = "Mumbai, India"
+coords = "19.0760° N, 72.8777° E"
+education = "B.Tech CSE · 2025"
+github_joined = "2022-09-06"
+status = "Currently building @ GoParkEasy"
+taglines = [
+  "Full-Stack & AI Engineer @ GoParkEasy",
+  "I ship production SaaS, first commit to live ops",
+  "Building RAG agents, voice AI & real-time systems",
+  "600+ endpoints · 3 queues · zero client polling",
+]
+focus = ["Full-Stack", "AI / LLMs", "Real-time"]
+
+[links]
+portfolio = "https://swayampatil.vercel.app"
+linkedin = "https://www.linkedin.com/in/swayampatil"
+email = "patilswayam96@gmail.com"
+leetcode = "https://leetcode.com/SwayamP/"
+leetcode_user = "SwayamP"
+resume = "https://drive.google.com/file/d/1P1EvdPLFmHG16GUYRoAI6XvwXH_ZdRf8/view"
+
+[stats]
+# Notebook outputs inflate byte counts, so they don't count towards "top languages".
+exclude_languages = ["Jupyter Notebook"]
+
+[terminal]
+host = "goparkeasy"
+whoami = "Swayam Patil · Full-Stack & AI Engineer · Mumbai, India"
+neofetch = [
+  ["Role", "Full-Stack & AI Engineer @ GoParkEasy"],
+  ["Stack", "Next.js · Node.js · MongoDB · Redis · BullMQ"],
+  ["AI", "RAG · Vector Search · Tool-calling · Voice agents"],
+  ["Edu", "B.Tech CSE · CGPA 8.2 · DYPCOE Kolhapur"],
+]
+# `code` is highlighted in cyan, **numbers** in amber.
+now = [
+  "Scaling GoParkEasy's parking SaaS: **600+** endpoints · **57** collections · **6** roles",
+  "Shipped `ParkBuddy`, a RAG support agent on Gemini + MongoDB Atlas Vector Search",
+  "Hardening the core: Redis + LRU caching · `BullMQ` queues · Redis Streams + Socket.io",
+  "Side quests: `Intervexa` (AI mock interviews) · `AI Receptionist` (voice agents)",
+]
+
+# "By the numbers" tiles. Digits roll like an odometer; everything else is static.
+[[impact]]
+value = "600+"
+label = "REST endpoints shipped to production"
+context = "GoParkEasy · parking SaaS"
+color = "cyan"
+icon = "glyph:code"
+
+[[impact]]
+value = "57"
+label = "MongoDB collections, 6 user roles"
+context = "GoParkEasy · data model"
+color = "indigo"
+icon = "glyph:database"
+
+[[impact]]
+value = "<100ms"
+label = "voice-agent replies on top intents"
+context = "AI Receptionist · Retell AI"
+color = "pink"
+icon = "glyph:mic"
+
+[[impact]]
+value = "+35%"
+label = "ATS match score uplift, results in <5s"
+context = "FixMyResume · Gemini + NLP"
+color = "amber"
+icon = "glyph:file"
+
+[[impact]]
+value = "85%"
+label = "classification accuracy on live traffic"
+context = "BikeWatch · YOLOv5 + DeepSORT"
+color = "green"
+icon = "glyph:eye"
+
+[[impact]]
+value = "12"
+label = "business verticals on one voice agent"
+context = "AI Receptionist · SaaS"
+color = "violet"
+icon = "glyph:sparkle"
+
+# Career timeline, oldest first. The last entry pulses as "now".
+[[journey]]
+when = "Dec 2021"
+title = "B.Tech, Computer Science"
+org = "DYPCOE · Kolhapur"
+note = "Fell for Python, ML and shipping side projects"
+color = "cyan"
+icon = "glyph:cap"
+
+[[journey]]
+when = "May 2024"
+title = "Machine Learning Intern"
+org = "Infosys Springboard"
+note = "Led BikeWatch: YOLOv5 + DeepSORT vehicle tracking"
+color = "green"
+icon = "glyph:eye"
+
+[[journey]]
+when = "Jun 2025"
+title = "Graduated · CGPA 8.2"
+org = "DYPCOE · Kolhapur"
+note = "Plus FixMyResume and a few AI products on the side"
+color = "amber"
+icon = "glyph:rocket"
+
+[[journey]]
+when = "Aug 2025"
+title = "Full-Stack Engineer Intern"
+org = "GoParkEasy · Remote"
+note = "Architected the parking platform from scratch"
+color = "indigo"
+icon = "glyph:code"
+
+[[journey]]
+when = "Nov 2025"
+title = "Full-Stack & AI Engineer"
+org = "GoParkEasy · Mumbai"
+note = "ParkBuddy RAG agent, BullMQ, Redis Streams"
+color = "pink"
+icon = "glyph:sparkle"
+
+[[journey]]
+when = "Now"
+title = "Building what's next"
+org = "Open to big problems"
+note = "AI products that feel fast, reliable and human"
+color = "violet"
+icon = "glyph:bolt"
+
+# Tech stack rows. An item is an icon slug from data/icons.json, or "Label=slug".
+[[stack]]
+label = "Languages"
+items = ["typescript", "javascript", "python", "SQL=glyph:database", "html5", "css"]
+
+[[stack]]
+label = "Frontend"
+items = ["react", "nextdotjs", "tailwindcss", "vite"]
+
+[[stack]]
+label = "Backend"
+items = ["nodedotjs", "express", "django", "fastapi", "socketdotio", "JWT=jsonwebtokens"]
+
+[[stack]]
+label = "Data & queues"
+items = ["mongodb", "postgresql", "redis", "supabase", "BullMQ=glyph:queue", "Redis Streams=glyph:bolt"]
+
+[[stack]]
+label = "AI / ML"
+items = ["Gemini=googlegemini", "GPT-4o=glyph:sparkle", "RAG · Vector search=glyph:vector", "Retell AI=glyph:mic", "pytorch", "tensorflow", "opencv", "YOLOv5 + DeepSORT=glyph:eye"]
+
+[[stack]]
+label = "DevOps & QA"
+items = ["docker", "nginx", "AWS S3=aws", "vercel", "githubactions", "jest", "Playwright=glyph:browser", "SonarQube=sonarqubeserver", "puppeteer"]
+
+# Featured project cards (one SVG each, so every card links somewhere).
+# motif: wave | chat | gauge | chart | write | play
+[[projects]]
+slug = "ai-receptionist"
+name = "AI Receptionist"
+kind = "Voice AI · SaaS"
+color = "pink"
+icon = "glyph:mic"
+motif = "wave"
+url = "https://voicecallassistant.com"
+badge = "Live"
+summary = "A real-time voice agent that books appointments, runs waitlists and hands off to humans via LLM tool-calling. A SaaS for **12** business verticals, with PII encryption and row-level security."
+tags = ["Next.js", "Supabase", "Retell AI", "GPT-4o-mini"]
+
+[[projects]]
+slug = "intervexa"
+name = "Intervexa"
+kind = "AI interview simulator"
+color = "indigo"
+icon = "glyph:chat"
+motif = "chat"
+url = "https://github.com/Swayam26262/Intervexa"
+badge = "Code"
+summary = "Mock interviews that adapt to every answer: technical, coding, system design and behavioral rounds, voice in **8** languages, and a memory of your weak spots for the next session."
+tags = ["Next.js 15", "MongoDB", "Gemini · Claude", "Auth.js"]
+
+[[projects]]
+slug = "fixmyresume"
+name = "FixMyResume"
+kind = "LLM resume optimizer"
+color = "amber"
+icon = "glyph:file"
+motif = "gauge"
+url = "https://github.com/Swayam26262/FixMyResume"
+badge = "Code"
+summary = "Scores a resume against a job description and rewrites the gaps. **+35%** ATS match in under **5s**, served by a JWT-secured Python API that holds **100+** RPM."
+tags = ["Django", "React", "PostgreSQL", "Gemini"]
+
+[[projects]]
+slug = "datastory"
+name = "DataStory AI"
+kind = "AI data storytelling"
+color = "cyan"
+icon = "glyph:chart"
+motif = "chart"
+url = "https://github.com/Swayam26262/Data-Story"
+badge = "Code"
+summary = "Drop in a CSV, get a story: automated statistical analysis, an AI-written narrative and scrollytelling charts, exported as a polished PDF report."
+tags = ["Next.js", "FastAPI", "MongoDB", "Gemini"]
+
+[[projects]]
+slug = "writeflow"
+name = "WriteFlow"
+kind = "Full-stack blogging"
+color = "green"
+icon = "glyph:pen"
+motif = "write"
+url = "https://write-flow-delta.vercel.app"
+badge = "Live"
+summary = "A complete publishing platform: roles, a rich-text editor, media uploads, comments, likes, search and an admin dashboard, on serverless Postgres."
+tags = ["Next.js 15", "Neon Postgres", "TipTap", "JWT"]
+
+[[projects]]
+slug = "yt2notes"
+name = "YT2Notes"
+kind = "Video → study notes"
+color = "red"
+icon = "glyph:play"
+motif = "play"
+url = "https://github.com/Swayam26262/YT2Notes"
+badge = "Code"
+summary = "Paste a YouTube link, get organized study notes: transcripts are summarized by AI into structured notes you can keep, with Google sign-in."
+tags = ["Django", "React", "Google OAuth", "LLM"]
+
+# Contact buttons under the hero (one SVG each so each can be a link).
+[[buttons]]
+slug = "portfolio"
+label = "Portfolio"
+icon = "glyph:globe"
+color = "cyan"
+url = "https://swayampatil.vercel.app"
+
+[[buttons]]
+slug = "linkedin"
+label = "LinkedIn"
+icon = "linkedin"
+url = "https://www.linkedin.com/in/swayampatil"
+
+[[buttons]]
+slug = "email"
+label = "Email"
+icon = "gmail"
+url = "mailto:patilswayam96@gmail.com"
+
+[[buttons]]
+slug = "leetcode"
+label = "LeetCode"
+icon = "leetcode"
+url = "https://leetcode.com/SwayamP/"
+
+[[buttons]]
+slug = "resume"
+label = "Resume"
+icon = "glyph:file"
+color = "pink"
+url = "https://drive.google.com/file/d/1P1EvdPLFmHG16GUYRoAI6XvwXH_ZdRf8/view"
+
+[footer]
+headline = "Let's build something people love."
+line = "Open to interesting problems, collaborations and good conversations."
+note = "artwork generated with Python + SVG · refreshed daily by GitHub Actions"
