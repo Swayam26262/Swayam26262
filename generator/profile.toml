@@ -9,8 +9,8 @@
 name = "Swayam Patil"
 github = "Swayam26262"
 role = "Full-Stack Engineer"
-location = "Mumbai, India"
-coords = "19.0760° N, 72.8777° E"
+location = "Maharashtra, India"
+coords = "19.7515° N, 75.7139° E"
 github_joined = "2022-09-06"
 # Typed one after another in the hero. Keep each under 48 characters so they fit on phones too.
 taglines = [
@@ -22,7 +22,7 @@ taglines = [
 ]
 # Right-hand spec table in the hero. A row starting with "+" is drawn in the secondary teal.
 spec = [
-  ["Based", "Mumbai, India"],
+  ["Based", "Maharashtra, India"],
   ["Now", "Engineer @ GoParkEasy"],
   ["Focus", "APIs / real-time / scale"],
   ["+Also", "Applied AI: RAG, voice"],
@@ -142,7 +142,7 @@ note = "Architected the platform from scratch: QR check-in, PDF invoicing"
 [[journey]]
 when = "Nov 2025"
 title = "Full-Stack Engineer"
-org = "GoParkEasy · Mumbai"
+org = "GoParkEasy · Maharashtra"
 note = "Bookings & payouts, BullMQ, Redis Streams; plus a RAG support agent"
 
 [[journey]]
