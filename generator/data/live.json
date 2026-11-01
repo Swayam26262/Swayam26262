@@ -1,41 +1,11 @@
 {
  "github": {
-  "active_days_last_year": 181,
+  "active_days_last_year": 178,
   "busiest_day": {
    "count": 24,
    "date": "2026-09-12"
   },
   "calendar": [
-   [
-    [
-     "2025-10-26",
-     5
-    ],
-    [
-     "2025-10-27",
-     4
-    ],
-    [
-     "2025-10-28",
-     0
-    ],
-    [
-     "2025-10-29",
-     2
-    ],
-    [
-     "2025-10-30",
-     1
-    ],
-    [
-     "2025-10-31",
-     4
-    ],
-    [
-     "2025-11-01",
-     2
-    ]
-   ],
    [
     [
      "2025-11-02",
@@ -1578,16 +1548,38 @@
     [
      "2026-10-27",
      0
+    ],
+    [
+     "2026-10-28",
+     0
+    ],
+    [
+     "2026-10-29",
+     3
+    ],
+    [
+     "2026-10-30",
+     0
+    ],
+    [
+     "2026-10-31",
+     0
+    ]
+   ],
+   [
+    [
+     "2026-11-01",
+     0
     ]
    ]
   ],
-  "commits_total": 995,
-  "commits_year": 477,
+  "commits_total": 998,
+  "commits_year": 480,
   "contributed_to": 0,
-  "contributions_last_year": 594,
-  "contributions_total": 1026,
+  "contributions_last_year": 588,
+  "contributions_total": 1029,
   "created_at": "2022-09-06T03:59:44Z",
-  "fetched_at": "2026-10-27T18:20:16+00:00",
+  "fetched_at": "2026-11-01T07:06:54+00:00",
   "followers": 7,
   "following": 9,
   "forks": 1,
@@ -1597,35 +1589,35 @@
     "bytes": 2824062,
     "color": "#3178c6",
     "name": "TypeScript",
-    "pct": 72.5,
+    "pct": 69.7,
     "repos": 6
+   },
+   {
+    "bytes": 580570,
+    "color": "#3572A5",
+    "name": "Python",
+    "pct": 14.3,
+    "repos": 12
    },
    {
     "bytes": 487530,
     "color": "#f1e05a",
     "name": "JavaScript",
-    "pct": 12.5,
+    "pct": 12.0,
     "repos": 13
-   },
-   {
-    "bytes": 427418,
-    "color": "#3572A5",
-    "name": "Python",
-    "pct": 11.0,
-    "repos": 11
    },
    {
     "bytes": 86072,
     "color": "#e34c26",
     "name": "HTML",
-    "pct": 2.2,
+    "pct": 2.1,
     "repos": 9
    },
    {
     "bytes": 61565,
     "color": "#663399",
     "name": "CSS",
-    "pct": 1.6,
+    "pct": 1.5,
     "repos": 13
    },
    {
@@ -1659,16 +1651,16 @@
   "weekday_totals": [
    77,
    63,
-   120,
-   82,
-   76,
-   123,
+   118,
+   84,
+   72,
+   121,
    53
   ]
  },
  "leetcode": {
-  "fetched_at": "2026-10-27T18:20:16+00:00",
-  "ranking": 853969,
+  "fetched_at": "2026-11-01T07:06:54+00:00",
+  "ranking": 855623,
   "solved": {
    "All": 204,
    "Easy": 107,
@@ -1676,10 +1668,10 @@
    "Medium": 79
   },
   "totals": {
-   "All": 4096,
-   "Easy": 974,
-   "Hard": 986,
-   "Medium": 2136
+   "All": 4100,
+   "Easy": 975,
+   "Hard": 987,
+   "Medium": 2138
   },
   "username": "SwayamP"
  }
