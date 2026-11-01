@@ -25,13 +25,19 @@ README picks one with `<picture>` and `prefers-color-scheme`.
 | --- | --- |
 | `profile.toml` | All the words: taglines, terminal lines, impact numbers, timeline, stack, projects, links |
 | `build.py` | Renders every card in both themes |
-| `cards/` | One module per card (hero, terminal, impact, journey, stack, projects, telemetry, buttons, footer) |
-| `core/` | Fonts (subset per SVG, embedded as WOFF2), themes, icons, typing and odometer animations |
+| `cards/` | One module per sheet: hero, buttons, about, impact, journey, stack, projects, telemetry, footer |
+| `core/design.py` | The design system: 8pt grid, hard 1px rules, solid offset block shadows, hatch/dot textures |
+| `core/` | Also fonts (subset per SVG, embedded as WOFF2), flat themes, icons, typing and odometer animations |
 | `live.py` | GitHub GraphQL + LeetCode fetchers; results are cached in `data/live.json` |
 | `connect4/` | The README Connect Four game: engine, AI, board art and the workflow runner |
 
-Adding a project card: add a `[[projects]]` entry to `profile.toml`, then add
-its `<picture>` link to the "Featured builds" section of the README.
+The look is deliberately flat: paper, ink and one signal orange, no gradients,
+no glows, no rounded pills. Display type is Instrument Serif, text is
+Instrument Sans, utilities are JetBrains Mono, and every box, padding and gap
+sits on an 8px grid.
+
+The projects bento shows the first six `[[projects]]`; keep the text links under
+it in the README in sync when you change them.
 
 ## Connect Four
 
@@ -44,11 +50,9 @@ in `data/connect4.json`. To reset everything, delete that file and run
 
 ## Credits
 
-- Fonts: [JetBrains Mono](https://github.com/JetBrains/JetBrainsMono),
-  [Space Grotesk](https://github.com/floriankarsten/space-grotesk),
-  [Inter](https://github.com/rsms/inter) and [Unbounded](https://github.com/googlefonts/unbounded),
-  all under the SIL Open Font License (see `fonts/OFL-*.txt`).
+- Fonts: [Instrument Serif and Instrument Sans](https://github.com/Instrument/instrument-serif) and
+  [JetBrains Mono](https://github.com/JetBrains/JetBrainsMono), all under the SIL Open Font License
+  (see `fonts/OFL-*.txt`).
 - Brand icons: [Simple Icons](https://simpleicons.org) (CC0); the LinkedIn and AWS marks come from
   [skill-icons](https://github.com/tandpfun/skill-icons) (MIT, see `data/LICENSE-skill-icons.txt`).
 - Snake: [Platane/snk](https://github.com/Platane/snk).
-- Section emoji: [Animated Fluent Emojis](https://github.com/Tarikul-Islam-Anik/Animated-Fluent-Emojis).

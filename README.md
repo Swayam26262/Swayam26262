@@ -1,123 +1,61 @@
 <!--
-  Hey, curious one. Everything visual on this page is generated:
-  generator/ renders the SVGs from generator/profile.toml, and
-  .github/workflows/profile.yml refreshes the live numbers and the snake every day.
+  Everything visual on this page is generated: generator/ renders the SVGs from
+  generator/profile.toml, and .github/workflows/profile.yml refreshes the live
+  numbers and the snake every day.
 -->
 
-<p align="center">
-  <a href="https://swayampatil.vercel.app">
-    <picture>
-      <source media="(prefers-color-scheme: dark)" srcset="assets/hero-dark.svg">
-      <img src="assets/hero-light.svg" width="100%" alt="Swayam Patil — Full-Stack & AI Engineer at GoParkEasy, Mumbai. I ship production SaaS, from first commit to live ops.">
-    </picture>
-  </a>
+<a href="https://swayampatil.vercel.app"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/hero-dark.svg"><img src="assets/hero-light.svg" width="100%" alt="Profile sheet: Swayam Patil, Full-Stack & AI Engineer at GoParkEasy, based in Mumbai, India. Focus: RAG, voice AI and real-time systems. B.Tech CSE, 2025. Status: shipping."></picture></a>
+
+<p>
+<a href="mailto:patilswayam96@gmail.com"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/btn-email-dark.svg"><img src="assets/btn-email-light.svg" height="48" alt="Email"></picture></a>
+<a href="https://swayampatil.vercel.app"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/btn-portfolio-dark.svg"><img src="assets/btn-portfolio-light.svg" height="48" alt="Portfolio"></picture></a>
+<a href="https://www.linkedin.com/in/swayampatil"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/btn-linkedin-dark.svg"><img src="assets/btn-linkedin-light.svg" height="48" alt="LinkedIn"></picture></a>
+<a href="https://leetcode.com/SwayamP/"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/btn-leetcode-dark.svg"><img src="assets/btn-leetcode-light.svg" height="48" alt="LeetCode"></picture></a>
+<a href="https://drive.google.com/file/d/1P1EvdPLFmHG16GUYRoAI6XvwXH_ZdRf8/view"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/btn-resume-dark.svg"><img src="assets/btn-resume-light.svg" height="48" alt="Resume"></picture></a>
 </p>
 
-<p align="center">
-  <a href="https://swayampatil.vercel.app"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/btn-portfolio-dark.svg"><img src="assets/btn-portfolio-light.svg" height="44" alt="Portfolio"></picture></a>
-  <a href="https://www.linkedin.com/in/swayampatil"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/btn-linkedin-dark.svg"><img src="assets/btn-linkedin-light.svg" height="44" alt="LinkedIn"></picture></a>
-  <a href="mailto:patilswayam96@gmail.com"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/btn-email-dark.svg"><img src="assets/btn-email-light.svg" height="44" alt="Email"></picture></a>
-  <a href="https://leetcode.com/SwayamP/"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/btn-leetcode-dark.svg"><img src="assets/btn-leetcode-light.svg" height="44" alt="LeetCode"></picture></a>
-  <a href="https://drive.google.com/file/d/1P1EvdPLFmHG16GUYRoAI6XvwXH_ZdRf8/view"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/btn-resume-dark.svg"><img src="assets/btn-resume-light.svg" height="44" alt="Resume"></picture></a>
+<picture><source media="(prefers-color-scheme: dark)" srcset="assets/about-dark.svg"><img src="assets/about-light.svg" width="100%" alt="Section 01, whoami. Production systems, with a brain. Full-stack and AI engineer at GoParkEasy who designs the APIs, queues, caches and real-time pipes behind a parking platform, then wires LLMs into them. A console runs neofetch with live GitHub and LeetCode numbers, then cat now.md: scaling a parking SaaS to 600+ endpoints and 57 collections, shipping the ParkBuddy RAG support agent, hardening the core with Redis, BullMQ and Redis Streams."></picture>
+
+<picture><source media="(prefers-color-scheme: dark)" srcset="assets/impact-dark.svg"><img src="assets/impact-light.svg" width="100%" alt="Section 02, impact. 600+ REST endpoints shipped to a production parking SaaS. 57 MongoDB collections across 6 user roles. Under 100 ms voice-agent replies on top intents. +35% ATS match uplift with FixMyResume. 85% classification accuracy with BikeWatch. 12 business verticals on one voice agent."></picture>
+
+<picture><source media="(prefers-color-scheme: dark)" srcset="assets/journey-dark.svg"><img src="assets/journey-light.svg" width="100%" alt="Section 03, trajectory, newest first. Now: building what's next. Nov 2025: Full-Stack & AI Engineer at GoParkEasy, Mumbai. Aug 2025: Full-Stack Engineer Intern at GoParkEasy. Jun 2025: graduated with a CGPA of 8.2. May 2024: Machine Learning Intern at Infosys Springboard, leading BikeWatch. Dec 2021: started a B.Tech in Computer Science at DYPCOE Kolhapur."></picture>
+
+<picture><source media="(prefers-color-scheme: dark)" srcset="assets/stack-dark.svg"><img src="assets/stack-light.svg" width="100%" alt="Section 04, the stack as a periodic table. Languages: TypeScript, JavaScript, Python, SQL, HTML5, CSS. Frontend: React, Next.js, Tailwind, Vite. Backend: Node.js, Express, Django, FastAPI, Socket.io, JWT. Data and queues: MongoDB, Postgres, Redis, Supabase, BullMQ, Redis Streams. AI and ML: Gemini, GPT-4o, RAG, Retell AI, PyTorch, TensorFlow, OpenCV, YOLOv5. DevOps and QA: Docker, NGINX, AWS S3, Vercel, GitHub Actions, Jest, Playwright, SonarQube, Puppeteer."></picture>
+
+<picture><source media="(prefers-color-scheme: dark)" srcset="assets/projects-dark.svg"><img src="assets/projects-light.svg" width="100%" alt="Section 05, selected work. Featured: AI Receptionist, a real-time voice agent SaaS for 12 business verticals. Intervexa, AI mock interviews in 8 languages. FixMyResume, +35% ATS match in under 5 seconds. DataStory AI, CSV to narrated data story. WriteFlow, a full publishing platform. YT2Notes, YouTube videos into AI study notes."></picture>
+
+<p>
+<a href="https://voicecallassistant.com">AI Receptionist ↗</a> &nbsp;/&nbsp;
+<a href="https://github.com/Swayam26262/Intervexa">Intervexa ↗</a> &nbsp;/&nbsp;
+<a href="https://github.com/Swayam26262/FixMyResume">FixMyResume ↗</a> &nbsp;/&nbsp;
+<a href="https://github.com/Swayam26262/Data-Story">DataStory AI ↗</a> &nbsp;/&nbsp;
+<a href="https://write-flow-delta.vercel.app">WriteFlow ↗</a> &nbsp;/&nbsp;
+<a href="https://github.com/Swayam26262/YT2Notes">YT2Notes ↗</a>
+<br>
+<sub>Also on the shelf: <a href="https://cineguide.streamlit.app">CineGuide</a> / <a href="https://github.com/Swayam26262/WhisperOnce">WhisperOnce</a> / <a href="https://github.com/Swayam26262/SummarizeAI">SummarizeAI</a> / <a href="https://github.com/Swayam26262/Portfolio">Portfolio</a></sub>
 </p>
 
-<p align="center">
-  <img src="https://komarev.com/ghpvc/?username=Swayam26262&label=profile%20views&color=6366f1&style=flat-square" alt="Profile views">
-</p>
+<picture><source media="(prefers-color-scheme: dark)" srcset="assets/telemetry-dark.svg"><img src="assets/telemetry-light.svg" width="100%" alt="Section 06, live GitHub telemetry refreshed daily: contributions in the last 12 months, longest streak, all-time commits and LeetCode problems solved, an axonometric skyline of the last 53 weeks of contributions with the best day marked, and top languages by bytes."></picture>
 
-## <img src="https://raw.githubusercontent.com/Tarikul-Islam-Anik/Animated-Fluent-Emojis/master/Emojis/Hand%20gestures/Waving%20Hand.png" width="30" alt=""> Hey, I'm Swayam
-
-<picture>
-  <source media="(prefers-color-scheme: dark)" srcset="assets/terminal-dark.svg">
-  <img src="assets/terminal-light.svg" width="100%" alt="A terminal session. whoami: Swayam Patil, Full-Stack & AI Engineer in Mumbai, India. neofetch: Full-Stack & AI Engineer at GoParkEasy; stack Next.js, Node.js, MongoDB, Redis, BullMQ; AI work in RAG, vector search, tool-calling and voice agents; B.Tech CSE with CGPA 8.2; plus live GitHub and LeetCode stats. now.md: scaling GoParkEasy's parking SaaS to 600+ endpoints, shipped the ParkBuddy RAG support agent, hardening the core with Redis, BullMQ and Redis Streams.">
-</picture>
-
-## <img src="https://raw.githubusercontent.com/Tarikul-Islam-Anik/Animated-Fluent-Emojis/master/Emojis/Travel%20and%20places/High%20Voltage.png" width="30" alt=""> Impact, by the numbers
-
-<picture>
-  <source media="(prefers-color-scheme: dark)" srcset="assets/impact-dark.svg">
-  <img src="assets/impact-light.svg" width="100%" alt="600+ REST endpoints shipped to production. 57 MongoDB collections across 6 user roles. Under 100 ms voice-agent replies on top intents. +35% ATS match uplift with FixMyResume. 85% classification accuracy with BikeWatch. 12 business verticals on one voice agent.">
-</picture>
-
-## <img src="https://raw.githubusercontent.com/Tarikul-Islam-Anik/Animated-Fluent-Emojis/master/Emojis/Travel%20and%20places/Compass.png" width="30" alt=""> The journey so far
-
-<picture>
-  <source media="(prefers-color-scheme: dark)" srcset="assets/journey-dark.svg">
-  <img src="assets/journey-light.svg" width="100%" alt="Timeline: Dec 2021 started a B.Tech in Computer Science at DYPCOE Kolhapur. May 2024 Machine Learning Intern at Infosys Springboard, leading BikeWatch. Jun 2025 graduated with CGPA 8.2. Aug 2025 Full-Stack Engineer Intern at GoParkEasy. Nov 2025 Full-Stack & AI Engineer at GoParkEasy, Mumbai. Now: building what's next.">
-</picture>
-
-## <img src="https://raw.githubusercontent.com/Tarikul-Islam-Anik/Animated-Fluent-Emojis/master/Emojis/Objects/Hammer%20and%20Wrench.png" width="30" alt=""> Tech arsenal
-
-<picture>
-  <source media="(prefers-color-scheme: dark)" srcset="assets/stack-dark.svg">
-  <img src="assets/stack-light.svg" width="100%" alt="Languages: TypeScript, JavaScript, Python, SQL, HTML5, CSS. Frontend: React, Next.js, Tailwind CSS, Vite. Backend: Node.js, Express, Django, FastAPI, Socket.io, JWT. Data and queues: MongoDB, PostgreSQL, Redis, Supabase, BullMQ, Redis Streams. AI/ML: Gemini, GPT-4o, RAG and vector search, Retell AI, PyTorch, TensorFlow, OpenCV, YOLOv5 + DeepSORT. DevOps and QA: Docker, NGINX, AWS S3, Vercel, GitHub Actions, Jest, Playwright, SonarQube, Puppeteer.">
-</picture>
-
-## <img src="https://raw.githubusercontent.com/Tarikul-Islam-Anik/Animated-Fluent-Emojis/master/Emojis/Travel%20and%20places/Rocket.png" width="30" alt=""> Featured builds
-
-<p align="center">
-  <a href="https://voicecallassistant.com"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/project-ai-receptionist-dark.svg"><img src="assets/project-ai-receptionist-light.svg" width="49%" alt="AI Receptionist: a real-time voice agent that books appointments, runs waitlists and hands off to humans via LLM tool-calling. Next.js, Supabase, Retell AI. Live."></picture></a>
-  <a href="https://github.com/Swayam26262/Intervexa"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/project-intervexa-dark.svg"><img src="assets/project-intervexa-light.svg" width="49%" alt="Intervexa: AI mock interviews that adapt to every answer, with voice in 8 languages. Next.js 15, MongoDB, Gemini and Claude."></picture></a>
-</p>
-<p align="center">
-  <a href="https://github.com/Swayam26262/FixMyResume"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/project-fixmyresume-dark.svg"><img src="assets/project-fixmyresume-light.svg" width="49%" alt="FixMyResume: an LLM resume optimizer, +35% ATS match in under 5 seconds. Django, React, PostgreSQL, Gemini."></picture></a>
-  <a href="https://github.com/Swayam26262/Data-Story"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/project-datastory-dark.svg"><img src="assets/project-datastory-light.svg" width="49%" alt="DataStory AI: turns a CSV into an AI-narrated, scrollytelling data story. Next.js, FastAPI, MongoDB, Gemini."></picture></a>
-</p>
-<p align="center">
-  <a href="https://write-flow-delta.vercel.app"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/project-writeflow-dark.svg"><img src="assets/project-writeflow-light.svg" width="49%" alt="WriteFlow: a full-stack blogging platform with roles, rich text, media, comments and an admin dashboard. Next.js 15, Neon Postgres. Live."></picture></a>
-  <a href="https://github.com/Swayam26262/YT2Notes"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/project-yt2notes-dark.svg"><img src="assets/project-yt2notes-light.svg" width="49%" alt="YT2Notes: turns YouTube videos into organized, AI-summarized study notes. Django, React, Google OAuth."></picture></a>
-</p>
-
-<p align="center">
-  <sub>
-    More on the shelf:
-    <a href="https://cineguide.streamlit.app">CineGuide</a> (ML movie recommender) ·
-    <a href="https://github.com/Swayam26262/WhisperOnce">WhisperOnce</a> (read-once confessions with sentiment analysis) ·
-    <a href="https://github.com/Swayam26262/SummarizeAI">SummarizeAI</a> (YouTube summaries) ·
-    <a href="https://github.com/Swayam26262/Portfolio">Portfolio</a> (Next.js)
-  </sub>
-</p>
-
-## <img src="https://raw.githubusercontent.com/Tarikul-Islam-Anik/Animated-Fluent-Emojis/master/Emojis/Objects/Satellite%20Antenna.png" width="30" alt=""> Live GitHub telemetry
-
-<picture>
-  <source media="(prefers-color-scheme: dark)" srcset="assets/telemetry-dark.svg">
-  <img src="assets/telemetry-light.svg" width="100%" alt="Live GitHub stats refreshed daily: contributions in the last year, current and longest streak, all-time commits, a 3D skyline of the last 53 weeks of contributions, and top languages.">
-</picture>
-
-<picture>
-  <source media="(prefers-color-scheme: dark)" srcset="assets/snake-dark.svg">
-  <img src="assets/snake-light.svg" width="100%" alt="A snake eating my GitHub contribution graph.">
-</picture>
-
-## <img src="https://raw.githubusercontent.com/Tarikul-Islam-Anik/Animated-Fluent-Emojis/master/Emojis/Activities/Video%20Game.png" width="30" alt=""> Humans vs. AI: Connect Four
-
-<p align="center">Everyone on GitHub plays <b>one shared game</b> against an AI I wrote.<br>Click a column, press <b>Create</b> on the issue that opens, and the AI answers within a minute or two.</p>
+<picture><source media="(prefers-color-scheme: dark)" srcset="assets/snake-dark.svg"><img src="assets/snake-light.svg" width="100%" alt="A snake eating my GitHub contribution graph."></picture>
 
 <!-- CONNECT4:START -->
-<p align="center"><b>Game #1</b> · 🟡 humans vs 🔴 AI · you open. Pick a column 👇</p>
-<p align="center"><a href="https://github.com/Swayam26262/Swayam26262/issues/new?title=c4%7Cdrop%7C1&body=Just%20press%20%2A%2ACreate%2A%2A%20%28or%20%2A%2ASubmit%20new%20issue%2A%2A%29%2C%20no%20need%20to%20write%20anything.%0A%0AA%20GitHub%20Action%20will%20drop%20your%20disc%2C%20let%20the%20AI%20reply%20and%20update%20the%20board%20in%20about%20a%20minute."><picture><source media="(prefers-color-scheme: dark)" srcset="assets/connect4/col-1-dark.svg"><img src="assets/connect4/col-1-light.svg" width="56" alt="Drop a disc in column 1"></picture></a><a href="https://github.com/Swayam26262/Swayam26262/issues/new?title=c4%7Cdrop%7C2&body=Just%20press%20%2A%2ACreate%2A%2A%20%28or%20%2A%2ASubmit%20new%20issue%2A%2A%29%2C%20no%20need%20to%20write%20anything.%0A%0AA%20GitHub%20Action%20will%20drop%20your%20disc%2C%20let%20the%20AI%20reply%20and%20update%20the%20board%20in%20about%20a%20minute."><picture><source media="(prefers-color-scheme: dark)" srcset="assets/connect4/col-2-dark.svg"><img src="assets/connect4/col-2-light.svg" width="56" alt="Drop a disc in column 2"></picture></a><a href="https://github.com/Swayam26262/Swayam26262/issues/new?title=c4%7Cdrop%7C3&body=Just%20press%20%2A%2ACreate%2A%2A%20%28or%20%2A%2ASubmit%20new%20issue%2A%2A%29%2C%20no%20need%20to%20write%20anything.%0A%0AA%20GitHub%20Action%20will%20drop%20your%20disc%2C%20let%20the%20AI%20reply%20and%20update%20the%20board%20in%20about%20a%20minute."><picture><source media="(prefers-color-scheme: dark)" srcset="assets/connect4/col-3-dark.svg"><img src="assets/connect4/col-3-light.svg" width="56" alt="Drop a disc in column 3"></picture></a><a href="https://github.com/Swayam26262/Swayam26262/issues/new?title=c4%7Cdrop%7C4&body=Just%20press%20%2A%2ACreate%2A%2A%20%28or%20%2A%2ASubmit%20new%20issue%2A%2A%29%2C%20no%20need%20to%20write%20anything.%0A%0AA%20GitHub%20Action%20will%20drop%20your%20disc%2C%20let%20the%20AI%20reply%20and%20update%20the%20board%20in%20about%20a%20minute."><picture><source media="(prefers-color-scheme: dark)" srcset="assets/connect4/col-4-dark.svg"><img src="assets/connect4/col-4-light.svg" width="56" alt="Drop a disc in column 4"></picture></a><a href="https://github.com/Swayam26262/Swayam26262/issues/new?title=c4%7Cdrop%7C5&body=Just%20press%20%2A%2ACreate%2A%2A%20%28or%20%2A%2ASubmit%20new%20issue%2A%2A%29%2C%20no%20need%20to%20write%20anything.%0A%0AA%20GitHub%20Action%20will%20drop%20your%20disc%2C%20let%20the%20AI%20reply%20and%20update%20the%20board%20in%20about%20a%20minute."><picture><source media="(prefers-color-scheme: dark)" srcset="assets/connect4/col-5-dark.svg"><img src="assets/connect4/col-5-light.svg" width="56" alt="Drop a disc in column 5"></picture></a><a href="https://github.com/Swayam26262/Swayam26262/issues/new?title=c4%7Cdrop%7C6&body=Just%20press%20%2A%2ACreate%2A%2A%20%28or%20%2A%2ASubmit%20new%20issue%2A%2A%29%2C%20no%20need%20to%20write%20anything.%0A%0AA%20GitHub%20Action%20will%20drop%20your%20disc%2C%20let%20the%20AI%20reply%20and%20update%20the%20board%20in%20about%20a%20minute."><picture><source media="(prefers-color-scheme: dark)" srcset="assets/connect4/col-6-dark.svg"><img src="assets/connect4/col-6-light.svg" width="56" alt="Drop a disc in column 6"></picture></a><a href="https://github.com/Swayam26262/Swayam26262/issues/new?title=c4%7Cdrop%7C7&body=Just%20press%20%2A%2ACreate%2A%2A%20%28or%20%2A%2ASubmit%20new%20issue%2A%2A%29%2C%20no%20need%20to%20write%20anything.%0A%0AA%20GitHub%20Action%20will%20drop%20your%20disc%2C%20let%20the%20AI%20reply%20and%20update%20the%20board%20in%20about%20a%20minute."><picture><source media="(prefers-color-scheme: dark)" srcset="assets/connect4/col-7-dark.svg"><img src="assets/connect4/col-7-light.svg" width="56" alt="Drop a disc in column 7"></picture></a><br><picture><source media="(prefers-color-scheme: dark)" srcset="assets/connect4/board-1-0-dark.svg"><img src="assets/connect4/board-1-0-light.svg" width="424" alt="Connect Four board, game #1"></picture></p>
-<details>
-<summary><b>Scoreboard, hall of fame and how it works</b></summary>
+<picture><source media="(prefers-color-scheme: dark)" srcset="assets/connect4/header-dark.svg"><img src="assets/connect4/header-light.svg" width="100%" alt="Section 07, play: one shared game of Connect Four against my AI"></picture>
 
-| 🟡 Humans | 🔴 AI | 🤝 Draws |
+<p><b>Game 1</b>, move 1. You play orange and open; the AI plays black.</p>
+<p><a href="https://github.com/Swayam26262/Swayam26262/issues/new?title=c4%7Cdrop%7C1&body=Just%20press%20%2A%2ACreate%2A%2A%20%28or%20%2A%2ASubmit%20new%20issue%2A%2A%29%2C%20no%20need%20to%20write%20anything.%0A%0AA%20GitHub%20Action%20will%20drop%20your%20disc%2C%20let%20the%20AI%20reply%20and%20update%20the%20board%20in%20about%20a%20minute."><picture><source media="(prefers-color-scheme: dark)" srcset="assets/connect4/col-1-dark.svg"><img src="assets/connect4/col-1-light.svg" width="72" alt="Drop a disc in column 1"></picture></a><a href="https://github.com/Swayam26262/Swayam26262/issues/new?title=c4%7Cdrop%7C2&body=Just%20press%20%2A%2ACreate%2A%2A%20%28or%20%2A%2ASubmit%20new%20issue%2A%2A%29%2C%20no%20need%20to%20write%20anything.%0A%0AA%20GitHub%20Action%20will%20drop%20your%20disc%2C%20let%20the%20AI%20reply%20and%20update%20the%20board%20in%20about%20a%20minute."><picture><source media="(prefers-color-scheme: dark)" srcset="assets/connect4/col-2-dark.svg"><img src="assets/connect4/col-2-light.svg" width="56" alt="Drop a disc in column 2"></picture></a><a href="https://github.com/Swayam26262/Swayam26262/issues/new?title=c4%7Cdrop%7C3&body=Just%20press%20%2A%2ACreate%2A%2A%20%28or%20%2A%2ASubmit%20new%20issue%2A%2A%29%2C%20no%20need%20to%20write%20anything.%0A%0AA%20GitHub%20Action%20will%20drop%20your%20disc%2C%20let%20the%20AI%20reply%20and%20update%20the%20board%20in%20about%20a%20minute."><picture><source media="(prefers-color-scheme: dark)" srcset="assets/connect4/col-3-dark.svg"><img src="assets/connect4/col-3-light.svg" width="56" alt="Drop a disc in column 3"></picture></a><a href="https://github.com/Swayam26262/Swayam26262/issues/new?title=c4%7Cdrop%7C4&body=Just%20press%20%2A%2ACreate%2A%2A%20%28or%20%2A%2ASubmit%20new%20issue%2A%2A%29%2C%20no%20need%20to%20write%20anything.%0A%0AA%20GitHub%20Action%20will%20drop%20your%20disc%2C%20let%20the%20AI%20reply%20and%20update%20the%20board%20in%20about%20a%20minute."><picture><source media="(prefers-color-scheme: dark)" srcset="assets/connect4/col-4-dark.svg"><img src="assets/connect4/col-4-light.svg" width="56" alt="Drop a disc in column 4"></picture></a><a href="https://github.com/Swayam26262/Swayam26262/issues/new?title=c4%7Cdrop%7C5&body=Just%20press%20%2A%2ACreate%2A%2A%20%28or%20%2A%2ASubmit%20new%20issue%2A%2A%29%2C%20no%20need%20to%20write%20anything.%0A%0AA%20GitHub%20Action%20will%20drop%20your%20disc%2C%20let%20the%20AI%20reply%20and%20update%20the%20board%20in%20about%20a%20minute."><picture><source media="(prefers-color-scheme: dark)" srcset="assets/connect4/col-5-dark.svg"><img src="assets/connect4/col-5-light.svg" width="56" alt="Drop a disc in column 5"></picture></a><a href="https://github.com/Swayam26262/Swayam26262/issues/new?title=c4%7Cdrop%7C6&body=Just%20press%20%2A%2ACreate%2A%2A%20%28or%20%2A%2ASubmit%20new%20issue%2A%2A%29%2C%20no%20need%20to%20write%20anything.%0A%0AA%20GitHub%20Action%20will%20drop%20your%20disc%2C%20let%20the%20AI%20reply%20and%20update%20the%20board%20in%20about%20a%20minute."><picture><source media="(prefers-color-scheme: dark)" srcset="assets/connect4/col-6-dark.svg"><img src="assets/connect4/col-6-light.svg" width="56" alt="Drop a disc in column 6"></picture></a><a href="https://github.com/Swayam26262/Swayam26262/issues/new?title=c4%7Cdrop%7C7&body=Just%20press%20%2A%2ACreate%2A%2A%20%28or%20%2A%2ASubmit%20new%20issue%2A%2A%29%2C%20no%20need%20to%20write%20anything.%0A%0AA%20GitHub%20Action%20will%20drop%20your%20disc%2C%20let%20the%20AI%20reply%20and%20update%20the%20board%20in%20about%20a%20minute."><picture><source media="(prefers-color-scheme: dark)" srcset="assets/connect4/col-7-dark.svg"><img src="assets/connect4/col-7-light.svg" width="56" alt="Drop a disc in column 7"></picture></a><br><picture><source media="(prefers-color-scheme: dark)" srcset="assets/connect4/board-1-0-dark.svg"><img src="assets/connect4/board-1-0-light.svg" width="432" alt="Connect Four board, game 1"></picture></p>
+<details>
+<summary><b>Scoreboard and how it works</b></summary>
+
+| Humans | AI | Draws |
 | :-: | :-: | :-: |
 | 0 | 0 | 0 |
 
-**How it works:** clicking a column opens a pre-filled issue. A GitHub Action reads it, drops your disc, lets a negamax AI with alpha-beta pruning (6 plies deep) reply, redraws the board and commits this README. Everyone plays the same game, so coordinate in the issues if you want to win.
+**How it works:** a column opens a pre-filled issue. A GitHub Action reads it, drops your disc, lets a negamax AI with alpha-beta pruning (6 plies deep) reply, redraws the board and commits this README. Everyone plays the same game, so coordinate in the issues if you want to win.
 
 </details>
 <!-- CONNECT4:END -->
 
-## <img src="https://raw.githubusercontent.com/Tarikul-Islam-Anik/Animated-Fluent-Emojis/master/Emojis/Hand%20gestures/Handshake.png" width="30" alt=""> Let's build something
+<a href="mailto:patilswayam96@gmail.com"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/footer-dark.svg"><img src="assets/footer-light.svg" width="100%" alt="Section 08, contact. Got a hard problem? Let's build it. Email patilswayam96@gmail.com, web swayampatil.vercel.app, LinkedIn in/swayampatil, GitHub Swayam26262."></picture></a>
 
-<a href="mailto:patilswayam96@gmail.com">
-  <picture>
-    <source media="(prefers-color-scheme: dark)" srcset="assets/footer-dark.svg">
-    <img src="assets/footer-light.svg" width="100%" alt="Let's build something people love. Open to interesting problems, collaborations and good conversations.">
-  </picture>
-</a>
-
-<p align="center">
-  <sub>This page is a program: the artwork is rendered by <a href="https://github.com/Swayam26262/Swayam26262/tree/main/generator">generator/</a> and refreshed daily by <a href="https://github.com/Swayam26262/Swayam26262/blob/main/.github/workflows/profile.yml">a GitHub Action</a>.</sub>
-</p>
+<sub>This page is a program: the artwork is rendered by <a href="https://github.com/Swayam26262/Swayam26262/tree/main/generator">generator/</a> and refreshed daily by <a href="https://github.com/Swayam26262/Swayam26262/blob/main/.github/workflows/profile.yml">a GitHub Action</a>.</sub>

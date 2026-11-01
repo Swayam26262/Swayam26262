@@ -31,18 +31,19 @@ class FontSpec:
 
 
 MONO_FALLBACK = "ui-monospace,SFMono-Regular,Menlo,Consolas,monospace"
+SERIF_FALLBACK = "'Iowan Old Style','Times New Roman',Georgia,serif"
 SANS_FALLBACK = "-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif"
 
 # CSS class -> font. Classes are short because they repeat a lot in the markup.
+#   sr/si  Instrument Serif (display)   t/tm/tb  Instrument Sans (text)   m/mb  JetBrains Mono (utility)
 SPECS = {
     "m": FontSpec("m", "JetBrainsMono-Regular.ttf", "spm", 400, MONO_FALLBACK),
     "mb": FontSpec("mb", "JetBrainsMono-Bold.ttf", "spm", 700, MONO_FALLBACK),
-    "d": FontSpec("d", "SpaceGrotesk-Bold.ttf", "spd", 700, SANS_FALLBACK),
-    "dm": FontSpec("dm", "SpaceGrotesk-Medium.ttf", "spd", 500, SANS_FALLBACK),
-    "s": FontSpec("s", "Inter-Regular.ttf", "sps", 400, SANS_FALLBACK),
-    "sm": FontSpec("sm", "Inter-Medium.ttf", "sps", 500, SANS_FALLBACK),
-    "sb": FontSpec("sb", "Inter-SemiBold.ttf", "sps", 600, SANS_FALLBACK),
-    "u": FontSpec("u", "Unbounded-ExtraBold.ttf", "spu", 800, SANS_FALLBACK),
+    "sr": FontSpec("sr", "InstrumentSerif-Regular.ttf", "sps", 400, SERIF_FALLBACK),
+    "si": FontSpec("si", "InstrumentSerif-Italic.ttf", "sps", 400, SERIF_FALLBACK),
+    "t": FontSpec("t", "InstrumentSans-Regular.ttf", "spt", 400, SANS_FALLBACK),
+    "tm": FontSpec("tm", "InstrumentSans-Medium.ttf", "spt", 500, SANS_FALLBACK),
+    "tb": FontSpec("tb", "InstrumentSans-SemiBold.ttf", "spt", 600, SANS_FALLBACK),
 }
 
 
@@ -110,5 +111,6 @@ def font_face_css(css_class: str, text: str) -> str:
     return (
         f"@font-face{{font-family:{spec.family}{css_class};font-weight:{spec.weight};"
         f"src:url(data:font/woff2;base64,{data}) format('woff2')}}"
-        f".{css_class}{{font-family:{spec.family}{css_class},{spec.fallback};font-weight:{spec.weight}}}"
+        f".{css_class}{{font-family:{spec.family}{css_class},{spec.fallback};font-weight:{spec.weight}"
+        f"{';font-style:italic' if css_class == 'si' else ''}}}"
     )

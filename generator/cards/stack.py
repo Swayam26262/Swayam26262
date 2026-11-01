@@ -1,90 +1,83 @@
-"""Tech stack: one row per category, chips with brand marks that pop in and
-catch a passing glint every few seconds."""
+"""§04 stack as a periodic table: 39 elements on a 13 x 3 grid of hard-ruled
+cells. Each group gets its own flat treatment and a marker walks the table."""
 
 from __future__ import annotations
 
 from core import fonts
-from core.icons import icon, title
-from core.svg import document, num, text
+from core.design import CSS as BASE, W, box, card, hline, patterns, strip, vline
+from core.icons import icon
+from core.svg import document, fit, text
 from core.theme import Theme
 
-W, PAD = 840, 22
-LABEL_W = 132
-CHIP_H, CHIP_GAP, ICON = 30, 8, 15
-FS = 12.5
+CELL_W, CELL_H, COLS = 64, 80, 13
+TOP = 40
+STEP = .15  # seconds the walking marker spends on each cell
 
-CSS = """
-.chip{animation:chip .55s cubic-bezier(.2,.9,.3,1.25) both}
-@keyframes chip{from{opacity:0;transform:translateY(9px)}}
-.lbl{animation:lbl .6s ease-out both}
-@keyframes lbl{from{opacity:0;transform:translateX(-8px)}}
-.glint{animation:glint 9s cubic-bezier(.5,0,.5,1) 2.5s infinite}
-@keyframes glint{0%{transform:translateX(0)}28%,100%{transform:translateX(1100px)}}
+CSS = BASE + """
+.walk{opacity:0;animation:walk steps(1,end) infinite}
+@keyframes walk{0%{opacity:1}3%,100%{opacity:0}}
 """
 
 
-def parse(item: str) -> tuple[str, str]:
-    if "=" in item:
-        label, slug = item.split("=", 1)
-        return label, slug
-    return title(item), item
+def treatment(style: str, theme: Theme) -> dict:
+    t = {
+        "accent": dict(fill=theme.accent, sym=theme.on_accent, txt=theme.on_accent, num=theme.on_accent),
+        "paper": dict(fill=theme.paper, sym=theme.ink, txt=theme.ink, num=theme.muted),
+        "paper2": dict(fill=theme.paper2, sym=theme.ink, txt=theme.ink, num=theme.muted),
+        "ink": dict(fill=theme.ink, sym=theme.paper, txt=theme.paper, num=theme.paper),
+        "accent-text": dict(fill=theme.paper, sym=theme.accent, txt=theme.ink, num=theme.accent),
+        "dots": dict(fill="url(#dots)", sym=theme.ink, txt=theme.ink, num=theme.muted),
+    }[style]
+    t["marker"] = theme.on_accent if style == "accent" else theme.accent
+    return t
 
 
 def render(profile: dict, theme: Theme, live: dict | None = None, today=None) -> str:
-    rows = profile["stack"]
-    x_min, x_max = PAD + LABEL_W, W - PAD
-    accents = [theme.cyan, theme.blue, theme.indigo, theme.violet, theme.pink, theme.amber, theme.green]
-    chip_fill = theme.panel2 if theme.dark else "#ffffff"
+    groups = profile["stack"]
+    elements = [(g, item) for g in groups for item in g["items"]]
+    rows = -(-len(elements) // COLS)
+    sheet_w = W - 8
+    legend_y = TOP + rows * CELL_H
+    H = legend_y + 48 + 8
+    cycle = len(elements) * STEP
+    body = [card(W, H, theme)]
+    body.append(strip(0, 0, sheet_w, "§04", "Stack — a periodic table",
+                      f"{len(elements)} elements · {len(groups)} groups", theme))
 
-    body, clips = [], []
-    y = PAD
-    order = 0
-    for r, row in enumerate(rows):
-        # flow the chips, wrapping inside the row
-        placed, cx, cy = [], x_min, y + 12
-        for item in row["items"]:
-            label, slug = parse(item)
-            w = 10 + ICON + 7 + fonts.width("sm", label, FS) + 12
-            if cx + w > x_max and cx > x_min:
-                cx, cy = x_min, cy + CHIP_H + CHIP_GAP
-            placed.append((label, slug, cx, cy, w))
-            cx += w + CHIP_GAP
-        row_h = (cy + CHIP_H + 12) - y
-        accent = accents[r % len(accents)]
-        mid = y + row_h / 2
-        body.append(
-            f'<g class="lbl" style="animation-delay:{r * .12:.2f}s">'
-            + text(PAD + 4, mid + 4, f"{r + 1:02d}", "mb", fill=accent, size=10.5, letter_spacing="1")
-            + text(PAD + 28, mid + 4, row["label"].upper(), "m", fill=theme.muted, size=10, letter_spacing="1.5")
-            + "</g>"
-        )
-        for label, slug, x0, y0, w in placed:
-            delay = .15 + r * .12 + order * .025
-            order += 1
-            body.append(
-                f'<g class="chip" style="animation-delay:{delay:.2f}s">'
-                f'<rect x="{num(x0 + .5)}" y="{num(y0 + .5)}" width="{num(w - 1)}" height="{CHIP_H - 1}" rx="9" '
-                f'fill="{chip_fill}" stroke="{theme.border}"/>'
-                + icon(slug, x0 + 10, y0 + (CHIP_H - ICON) / 2, ICON, theme, bg=chip_fill,
-                       color=None if not slug.startswith("glyph:") else accent, stroke_width=2)
-                + text(x0 + 10 + ICON + 7, y0 + CHIP_H / 2 + 4.3, label, "sm", fill=theme.text, size=FS)
-                + "</g>"
-            )
-            clips.append(f'<rect x="{num(x0)}" y="{num(y0)}" width="{num(w)}" height="{CHIP_H}" rx="9"/>')
-        if r < len(rows) - 1:
-            body.append(f'<path d="M{PAD} {num(y + row_h)}H{W - PAD}" stroke="{theme.border}" stroke-dasharray="3 5"/>')
-        y += row_h
-    H = y + PAD
+    cells = []
+    for i, (group, (symbol, name, slug)) in enumerate(elements):
+        r, c = divmod(i, COLS)
+        x, y = c * CELL_W, TOP + r * CELL_H
+        t = treatment(group["style"], theme)
+        parts = []
+        if group["style"] == "dots":
+            parts.append(f'<rect x="{x}" y="{y}" width="{CELL_W}" height="{CELL_H}" fill="{theme.paper}"/>')
+        parts.append(f'<rect x="{x}" y="{y}" width="{CELL_W}" height="{CELL_H}" fill="{t["fill"]}"/>')
+        parts.append(text(x + 8, y + 17, f"{i + 1:02d}", "m", fill=t["num"], size=9))
+        parts.append(icon(slug, x + CELL_W - 20, y + 8, 12, t["txt"], stroke_width=1.6))
+        parts.append(text(x + 8, y + 54, symbol, "sr", fill=t["sym"], size=32))
+        parts.append(text(x + 8, y + 70, name, "tm", fill=t["txt"], size=fit("tm", name, 9.5, CELL_W - 16)))
+        cells.append(f'<g class="on" style="animation-delay:{.2 + i * .025:.3f}s">{"".join(parts)}</g>')
+        cells.append(f'<rect class="walk" x="{x + 1}" y="{y + CELL_H - 5}" width="{CELL_W - 2}" height="4" '
+                     f'fill="{t["marker"]}" style="animation-duration:{cycle:.2f}s;animation-delay:{1.5 + i * STEP:.2f}s"/>')
+    body.append("".join(cells))
 
-    defs = (
-        f'<linearGradient id="gl" x1="0" x2="1"><stop offset="0" stop-color="#fff" stop-opacity="0"/>'
-        f'<stop offset=".5" stop-color="#fff" stop-opacity="{.16 if theme.dark else .7}"/>'
-        f'<stop offset="1" stop-color="#fff" stop-opacity="0"/></linearGradient>'
-        f'<clipPath id="chips">{"".join(clips)}</clipPath>'
-    )
-    panel = (f'<rect x=".5" y=".5" width="{W - 1}" height="{H - 1}" rx="16" fill="{theme.panel}" '
-             f'stroke="{theme.border}"/>')
-    glint = (f'<g clip-path="url(#chips)"><g transform="skewX(-20)"><rect class="glint" x="-160" y="0" width="120" '
-             f'height="{H}" fill="url(#gl)"/></g></g>')
-    desc = "; ".join(f"{row['label']}: {', '.join(parse(i)[0] for i in row['items'])}" for row in rows)
-    return document(panel + "".join(body) + glint, W, H, title="Tech stack", desc=desc, css=CSS, defs=defs)
+    rules = [vline(c * CELL_W - 1, TOP, legend_y, theme.ink) for c in range(1, COLS)]
+    rules += [hline(0, sheet_w, TOP + r * CELL_H - 1, theme.ink) for r in range(1, rows + 1)]
+    body.append(f'<g class="rule">{"".join(rules)}</g>')
+
+    # legend
+    x = 24
+    for group in groups:
+        t = treatment(group["style"], theme)
+        label = group["label"].upper()
+        if group["style"] == "dots":
+            body.append(f'<rect x="{x}" y="{legend_y + 16}" width="24" height="16" fill="{theme.paper}"/>')
+        body.append(box(x, legend_y + 16, 24, 16, theme.ink, t["fill"]))
+        if group["style"] == "accent-text":
+            body.append(f'<rect x="{x + 8}" y="{legend_y + 20}" width="8" height="8" fill="{theme.accent}"/>')
+        body.append(text(x + 32, legend_y + 28, label, "m", fill=theme.ink, size=10, letter_spacing="1.4"))
+        x += 32 + fonts.width("m", label, 10, 1.4) + 1.4 + 24
+    desc = "; ".join(f"{g['label']}: {', '.join(item[1] for item in g['items'])}" for g in groups)
+    return document("".join(body), W, H, title="Tech stack, as a periodic table", desc=desc, css=CSS,
+                    defs=patterns(theme))

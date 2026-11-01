@@ -5,10 +5,9 @@ fetch web fonts), so we keep small static instances here and subset them again
 per SVG at build time.
 
 Sources (all SIL Open Font License 1.1):
-  JetBrains Mono  https://github.com/JetBrains/JetBrainsMono   fonts/ttf/*.ttf
-  Space Grotesk   https://github.com/google/fonts             ofl/spacegrotesk/SpaceGrotesk[wght].ttf
-  Inter           https://github.com/google/fonts             ofl/inter/Inter[opsz,wght].ttf
-  Unbounded       https://github.com/google/fonts             ofl/unbounded/Unbounded[wght].ttf
+  JetBrains Mono    https://github.com/JetBrains/JetBrainsMono   fonts/ttf/*.ttf
+  Instrument Serif  https://github.com/google/fonts             ofl/instrumentserif/InstrumentSerif-{Regular,Italic}.ttf
+  Instrument Sans   https://github.com/google/fonts             ofl/instrumentsans/InstrumentSans[wdth,wght].ttf
 
 Usage: python generator/tools/prepare_fonts.py <dir-with-downloaded-sources>
 """
@@ -48,19 +47,17 @@ MONO_EXTRA = [
 FONTS = [
     ("JetBrainsMono-Regular.ttf", "JetBrainsMono-Regular.ttf", None, MONO_EXTRA),
     ("JetBrainsMono-Bold.ttf", "JetBrainsMono-Bold.ttf", None, MONO_EXTRA),
-    ("SpaceGrotesk-Medium.ttf", "SpaceGrotesk-VF.ttf", {"wght": 500}, []),
-    ("SpaceGrotesk-Bold.ttf", "SpaceGrotesk-VF.ttf", {"wght": 700}, []),
-    ("Inter-Regular.ttf", "Inter-VF.ttf", {"wght": 400, "opsz": 14}, []),
-    ("Inter-Medium.ttf", "Inter-VF.ttf", {"wght": 500, "opsz": 14}, []),
-    ("Inter-SemiBold.ttf", "Inter-VF.ttf", {"wght": 600, "opsz": 14}, []),
-    ("Unbounded-ExtraBold.ttf", "Unbounded-VF.ttf", {"wght": 800}, []),
+    ("InstrumentSerif-Regular.ttf", "InstrumentSerif-Regular.ttf", None, []),
+    ("InstrumentSerif-Italic.ttf", "InstrumentSerif-Italic.ttf", None, []),
+    ("InstrumentSans-Regular.ttf", "InstrumentSans-VF.ttf", {"wght": 400, "wdth": 100}, []),
+    ("InstrumentSans-Medium.ttf", "InstrumentSans-VF.ttf", {"wght": 500, "wdth": 100}, []),
+    ("InstrumentSans-SemiBold.ttf", "InstrumentSans-VF.ttf", {"wght": 600, "wdth": 100}, []),
 ]
 
 LICENSES = {
     "OFL-JetBrainsMono.txt": "JetBrainsMono-OFL.txt",
-    "OFL-SpaceGrotesk.txt": "SpaceGrotesk-OFL.txt",
-    "OFL-Inter.txt": "Inter-OFL.txt",
-    "OFL-Unbounded.txt": "Unbounded-OFL.txt",
+    "OFL-InstrumentSerif.txt": "InstrumentSerif-OFL.txt",
+    "OFL-InstrumentSans.txt": "InstrumentSans-OFL.txt",
 }
 
 

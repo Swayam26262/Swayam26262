@@ -29,7 +29,8 @@ class SvgTest(unittest.TestCase):
     def test_cards_render_cleanly(self):
         profile = build.load_profile()
         sample = {}  # no live data: cards must still render (placeholders)
-        for name, render in build.CARDS.items():
+        for name in build.CARDS:
+            render = build.renderer(name)
             for theme in THEMES:
                 result = render(profile, theme, sample, None)
                 outputs = result if isinstance(result, dict) else {name: result}

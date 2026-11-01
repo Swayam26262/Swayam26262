@@ -83,7 +83,7 @@ def typing_cycle(lines: list[TypedLine], *, y: float, size: float, cls: str, fil
     cw = lines[0].char_w
     body.append(
         f'<rect class="blink" x="{num(lines[0].x)}" y="{num(y - size * 0.82)}" width="{num(max(2.0, cw * 0.18))}" '
-        f'height="{num(size * 1.02)}" rx="1" fill="{cursor_fill}">{cursor.animate("x", total)}</rect>'
+        f'height="{num(size * 1.02)}" fill="{cursor_fill}">{cursor.animate("x", total)}</rect>'
     )
     return "".join(clips), "".join(body)
 

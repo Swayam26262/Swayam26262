@@ -1,4 +1,18 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="56" height="56" viewBox="0 0 56 56" role="img" aria-labelledby="svg-title svg-desc" fill="none"><title id="svg-title">Drop a disc in column 7</title><desc id="svg-desc">Drop a disc in column 7</desc><style>text{font-kerning:normal}@media (prefers-reduced-motion:reduce){*{animation-duration:0s!important;animation-delay:0s!important;animation-iteration-count:1!important}}
-.bob{animation:bob 1.6s ease-in-out infinite}
-@keyframes bob{50%{transform:translateY(4px)}}
-</style><defs><radialGradient id="d" cx=".38" cy=".32" r=".75"><stop offset="0" stop-color="#fde047"/><stop offset=".6" stop-color="#eab308"/><stop offset="1" stop-color="#a16207"/></radialGradient></defs><rect x="4.5" y="4.5" width="47" height="47" rx="13" fill="#111a30" stroke="#2b3b63"/><g class="bob" style="animation-delay:0.72s"><circle cx="28.0" cy="24.0" r="11" fill="url(#d)"/><path d="M23.0 40.0l5 5 5-5" stroke="#94a3c0" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></g></svg>
+<svg xmlns="http://www.w3.org/2000/svg" width="56" height="48" viewBox="0 0 56 48" role="img" aria-labelledby="svg-title svg-desc" fill="none"><title id="svg-title">Drop a disc in column 7</title><desc id="svg-desc">Drop a disc in column 7</desc><style>@font-face{font-family:spmmb;font-weight:700;src:url(data:font/woff2;base64,d09GMgABAAAAAAFsAA0AAAAAAtwAAAEgAAJOFAAAAAAAAAAAAAAAAAAAAAAAAAAAGyAcKgZgADwRCApcXwE2AiQDCAsIAAQgBQYHIBv0ASCuCuzWxq9sUrI0Vh3mPurmc8I0Hr7243fu7n4xSS64JpVkXgoeEkPNJJNO5bU2EDr/ZrxVptYID2x98l+4LO9I2z3gVvyKWtXizNoTsZBDZhOi8CIq0GjYqDh4+OQZ9QpUAIFGE6YkorXev/n8oX7oQUkX0oIa0st0ASdmYVyzEpFoABAAcHz/+LiPxm3m/5/yJt4jIE0kGFeLhIxuWaBbMYVaRUjGbVbI1+prlQCEqGgDGdSioAuDgAKyoOTc0FTTUm7da77aUtN0r1FjtLh96VOeNLt9ruvF3A4fGu/98Y8fcg8IpNPd97Z9+bo7/2H+DZ8b/Qu/mtnnAGkpEWolEHxnugAwNWUeACDSBZccQCBrlEEAAIBaGaiyUg==) format('woff2')}.mb{font-family:spmmb,ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-weight:700}text{font-kerning:normal}@media (prefers-reduced-motion:reduce){*{animation-duration:0s!important;animation-delay:0s!important;animation-iteration-count:1!important}}
+.rule{shape-rendering:crispEdges}
+.rise{animation:rise .9s cubic-bezier(.2,.8,.2,1) both;transform-box:fill-box}
+@keyframes rise{from{transform:translateY(105%)}}
+.slide{animation:slide .6s cubic-bezier(.2,.8,.2,1) both}
+@keyframes slide{from{opacity:0;transform:translateX(16px)}}
+.lift{animation:lift .6s cubic-bezier(.2,.8,.2,1) both}
+@keyframes lift{from{opacity:0;transform:translateY(8px)}}
+.on{animation:on .1s steps(1,start) both}
+@keyframes on{from{opacity:0}}
+.wipe{animation:wipe .7s cubic-bezier(.7,0,.3,1) both;transform-box:fill-box;transform-origin:left}
+@keyframes wipe{from{transform:scaleX(0)}}
+.blip{animation:blip 1s steps(1,end) infinite}
+@keyframes blip{50%{opacity:0}}
+
+.bob{animation:bob 1.2s steps(2,end) infinite}
+@keyframes bob{50%{transform:translateY(3px)}}
+</style><rect x="0.5" y="0.5" width="55" height="47" fill="#121212" stroke="#eeeae2"/><text x="12" y="20" class="mb" fill="#a8a297" font-size="10">7</text><g class="bob" style="animation-delay:0.6s"><rect x="20.0" y="18" width="16" height="16" fill="#ff5c26"/><path d="M23.0 38l5 5 5-5" stroke="#eeeae2" stroke-width="1.5" fill="none" stroke-linecap="square"/></g></svg>

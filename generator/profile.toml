@@ -1,57 +1,65 @@
 # Everything the README artwork says about me lives here.
 # Edit, push to main, and the "Profile refresh" workflow rebuilds every SVG.
+# Links and alt text live in README.md itself.
 
 [person]
 name = "Swayam Patil"
 github = "Swayam26262"
 role = "Full-Stack & AI Engineer"
-company = "GoParkEasy"
 location = "Mumbai, India"
 coords = "19.0760° N, 72.8777° E"
-education = "B.Tech CSE · 2025"
 github_joined = "2022-09-06"
-status = "Currently building @ GoParkEasy"
 taglines = [
   "Full-Stack & AI Engineer @ GoParkEasy",
   "I ship production SaaS, first commit to live ops",
   "Building RAG agents, voice AI & real-time systems",
   "600+ endpoints · 3 queues · zero client polling",
 ]
-focus = ["Full-Stack", "AI / LLMs", "Real-time"]
+# Right-hand spec table in the hero.
+spec = [
+  ["Based", "Mumbai, India"],
+  ["Now", "Engineer @ GoParkEasy"],
+  ["Focus", "RAG / voice AI / real-time"],
+  ["Edu", "B.Tech CSE, 2025"],
+  ["Status", "Shipping"],
+]
+# The band that scrolls along the bottom of the hero.
+ticker = ["Full-stack engineer", "AI / LLM systems", "RAG + vector search", "Voice agents",
+          "Redis Streams", "BullMQ", "Next.js", "Node.js", "MongoDB", "System design"]
 
 [links]
-portfolio = "https://swayampatil.vercel.app"
-linkedin = "https://www.linkedin.com/in/swayampatil"
-email = "patilswayam96@gmail.com"
-leetcode = "https://leetcode.com/SwayamP/"
-leetcode_user = "SwayamP"
-resume = "https://drive.google.com/file/d/1P1EvdPLFmHG16GUYRoAI6XvwXH_ZdRf8/view"
+leetcode_user = "SwayamP"   # LeetCode stats in the console and telemetry
 
 [stats]
 # Notebook outputs inflate byte counts, so they don't count towards "top languages".
 exclude_languages = ["Jupyter Notebook"]
 
-[terminal]
-host = "goparkeasy"
-whoami = "Swayam Patil · Full-Stack & AI Engineer · Mumbai, India"
+[about]
+heading = ["Production systems,", "*with a brain.*"]
+bio = "Full-stack & AI engineer at GoParkEasy. I design the APIs, queues, caches and real-time pipes behind a parking platform, then wire LLMs into them so they actually earn their keep."
 neofetch = [
   ["Role", "Full-Stack & AI Engineer @ GoParkEasy"],
-  ["Stack", "Next.js · Node.js · MongoDB · Redis · BullMQ"],
-  ["AI", "RAG · Vector Search · Tool-calling · Voice agents"],
-  ["Edu", "B.Tech CSE · CGPA 8.2 · DYPCOE Kolhapur"],
+  ["Stack", "Next.js / Node / Mongo / Redis / BullMQ"],
+  ["AI", "RAG / vectors / tool-calling / voice"],
 ]
-# `code` is highlighted in cyan, **numbers** in amber.
+# `code` is highlighted in the accent, **numbers** in bold.
 now = [
-  "Scaling GoParkEasy's parking SaaS: **600+** endpoints · **57** collections · **6** roles",
-  "Shipped `ParkBuddy`, a RAG support agent on Gemini + MongoDB Atlas Vector Search",
-  "Hardening the core: Redis + LRU caching · `BullMQ` queues · Redis Streams + Socket.io",
-  "Side quests: `Intervexa` (AI mock interviews) · `AI Receptionist` (voice agents)",
+  "Scaling a parking SaaS: **600+** endpoints, **57** collections",
+  "Shipped `ParkBuddy`: a RAG support agent on Gemini + Atlas",
+  "Hardening the core: Redis + LRU cache, `BullMQ`, Redis Streams",
+  "Side quests: `Intervexa` (AI interviews), `AI Receptionist`",
 ]
 
-# "By the numbers" tiles. Digits roll like an odometer; everything else is static.
+# Section copy that isn't tied to one list.
+[copy]
+impact_note = "Shipped, measured, in production."
+journey_heading = ["From first commit", "*to production.*"]
+journey_text = "Two internships, one degree and a platform built from an empty repo. Newest first."
+
+# "By the numbers" bento. Digits roll like an odometer; everything else is static.
 [[impact]]
 value = "600+"
-label = "REST endpoints shipped to production"
+label = "REST endpoints shipped to a production parking SaaS, across bookings, refunds and vendor payouts"
 context = "GoParkEasy · parking SaaS"
 color = "cyan"
 icon = "glyph:code"
@@ -66,7 +74,7 @@ icon = "glyph:database"
 [[impact]]
 value = "<100ms"
 label = "voice-agent replies on top intents"
-context = "AI Receptionist · Retell AI"
+context = "Voice AI · Retell"
 color = "pink"
 icon = "glyph:mic"
 
@@ -80,7 +88,7 @@ icon = "glyph:file"
 [[impact]]
 value = "85%"
 label = "classification accuracy on live traffic"
-context = "BikeWatch · YOLOv5 + DeepSORT"
+context = "BikeWatch · YOLOv5"
 color = "green"
 icon = "glyph:eye"
 
@@ -110,7 +118,7 @@ icon = "glyph:eye"
 
 [[journey]]
 when = "Jun 2025"
-title = "Graduated · CGPA 8.2"
+title = "Graduated, CGPA 8.2"
 org = "DYPCOE · Kolhapur"
 note = "Plus FixMyResume and a few AI products on the side"
 color = "amber"
@@ -140,35 +148,52 @@ note = "AI products that feel fast, reliable and human"
 color = "violet"
 icon = "glyph:bolt"
 
-# Tech stack rows. An item is an icon slug from data/icons.json, or "Label=slug".
+# Tech stack as a periodic table: 39 elements, 13 x 3. Each item is
+# [symbol, name, icon slug from data/icons.json]. `style` sets the group's flat treatment:
+# accent | paper | paper2 | ink | accent-text | dots
 [[stack]]
 label = "Languages"
-items = ["typescript", "javascript", "python", "SQL=glyph:database", "html5", "css"]
+style = "accent"
+items = [["Ts", "TypeScript", "typescript"], ["Js", "JavaScript", "javascript"], ["Py", "Python", "python"],
+         ["Sq", "SQL", "glyph:database"], ["Ht", "HTML5", "html5"], ["Cs", "CSS", "css"]]
 
 [[stack]]
 label = "Frontend"
-items = ["react", "nextdotjs", "tailwindcss", "vite"]
+style = "paper"
+items = [["Re", "React", "react"], ["Nx", "Next.js", "nextdotjs"], ["Tw", "Tailwind", "tailwindcss"],
+         ["Vt", "Vite", "vite"]]
 
 [[stack]]
 label = "Backend"
-items = ["nodedotjs", "express", "django", "fastapi", "socketdotio", "JWT=jsonwebtokens"]
+style = "paper2"
+items = [["Nd", "Node.js", "nodedotjs"], ["Ex", "Express", "express"], ["Dj", "Django", "django"],
+         ["Fa", "FastAPI", "fastapi"], ["Io", "Socket.io", "socketdotio"], ["Jw", "JWT", "jsonwebtokens"]]
 
 [[stack]]
 label = "Data & queues"
-items = ["mongodb", "postgresql", "redis", "supabase", "BullMQ=glyph:queue", "Redis Streams=glyph:bolt"]
+style = "ink"
+items = [["Mg", "MongoDB", "mongodb"], ["Pg", "Postgres", "postgresql"], ["Rd", "Redis", "redis"],
+         ["Sb", "Supabase", "supabase"], ["Bq", "BullMQ", "glyph:queue"], ["Rs", "Streams", "glyph:bolt"]]
 
 [[stack]]
 label = "AI / ML"
-items = ["Gemini=googlegemini", "GPT-4o=glyph:sparkle", "RAG · Vector search=glyph:vector", "Retell AI=glyph:mic", "pytorch", "tensorflow", "opencv", "YOLOv5 + DeepSORT=glyph:eye"]
+style = "accent-text"
+items = [["Gm", "Gemini", "googlegemini"], ["Gp", "GPT-4o", "glyph:sparkle"], ["Rg", "RAG", "glyph:vector"],
+         ["Rt", "Retell AI", "glyph:mic"], ["Pt", "PyTorch", "pytorch"], ["Tf", "TensorFlow", "tensorflow"],
+         ["Cv", "OpenCV", "opencv"], ["Yo", "YOLOv5", "glyph:eye"]]
 
 [[stack]]
 label = "DevOps & QA"
-items = ["docker", "nginx", "AWS S3=aws", "vercel", "githubactions", "jest", "Playwright=glyph:browser", "SonarQube=sonarqubeserver", "puppeteer"]
+style = "dots"
+items = [["Dk", "Docker", "docker"], ["Ng", "NGINX", "nginx"], ["S3", "AWS S3", "aws"], ["Vc", "Vercel", "vercel"],
+         ["Ga", "GH Actions", "githubactions"], ["Je", "Jest", "jest"], ["Pw", "Playwright", "glyph:browser"],
+         ["Sn", "SonarQube", "sonarqubeserver"], ["Pp", "Puppeteer", "puppeteer"]]
 
 # Featured project cards (one SVG each, so every card links somewhere).
-# motif: wave | chat | gauge | chart | write | play
+# The first project is the feature cell of the bento. motif: wave | chat | gauge | chart | write | play
 [[projects]]
 slug = "ai-receptionist"
+blurb = "Voice agent that books, waitlists and escalates via LLM tool-calling."
 name = "AI Receptionist"
 kind = "Voice AI · SaaS"
 color = "pink"
@@ -181,6 +206,7 @@ tags = ["Next.js", "Supabase", "Retell AI", "GPT-4o-mini"]
 
 [[projects]]
 slug = "intervexa"
+blurb = "Mock interviews that adapt to every answer, in 8 languages."
 name = "Intervexa"
 kind = "AI interview simulator"
 color = "indigo"
@@ -193,6 +219,7 @@ tags = ["Next.js 15", "MongoDB", "Gemini · Claude", "Auth.js"]
 
 [[projects]]
 slug = "fixmyresume"
+blurb = "Scores resumes against a JD: +35% ATS match in under 5s."
 name = "FixMyResume"
 kind = "LLM resume optimizer"
 color = "amber"
@@ -205,6 +232,7 @@ tags = ["Django", "React", "PostgreSQL", "Gemini"]
 
 [[projects]]
 slug = "datastory"
+blurb = "CSV in, a narrated data story out."
 name = "DataStory AI"
 kind = "AI data storytelling"
 color = "cyan"
@@ -217,6 +245,7 @@ tags = ["Next.js", "FastAPI", "MongoDB", "Gemini"]
 
 [[projects]]
 slug = "writeflow"
+blurb = "Full publishing platform on serverless Postgres."
 name = "WriteFlow"
 kind = "Full-stack blogging"
 color = "green"
@@ -229,6 +258,7 @@ tags = ["Next.js 15", "Neon Postgres", "TipTap", "JWT"]
 
 [[projects]]
 slug = "yt2notes"
+blurb = "YouTube videos into AI study notes."
 name = "YT2Notes"
 kind = "Video → study notes"
 color = "red"
@@ -239,40 +269,38 @@ badge = "Code"
 summary = "Paste a YouTube link, get organized study notes: transcripts are summarized by AI into structured notes you can keep, with Google sign-in."
 tags = ["Django", "React", "Google OAuth", "LLM"]
 
-# Contact buttons under the hero (one SVG each so each can be a link).
+# Contact buttons under the hero (one SVG each so each can be a link). The first is the primary.
+[[buttons]]
+slug = "email"
+label = "Email"
+url = "mailto:patilswayam96@gmail.com"
+
 [[buttons]]
 slug = "portfolio"
 label = "Portfolio"
-icon = "glyph:globe"
-color = "cyan"
 url = "https://swayampatil.vercel.app"
 
 [[buttons]]
 slug = "linkedin"
 label = "LinkedIn"
-icon = "linkedin"
 url = "https://www.linkedin.com/in/swayampatil"
-
-[[buttons]]
-slug = "email"
-label = "Email"
-icon = "gmail"
-url = "mailto:patilswayam96@gmail.com"
 
 [[buttons]]
 slug = "leetcode"
 label = "LeetCode"
-icon = "leetcode"
 url = "https://leetcode.com/SwayamP/"
 
 [[buttons]]
 slug = "resume"
 label = "Resume"
-icon = "glyph:file"
-color = "pink"
 url = "https://drive.google.com/file/d/1P1EvdPLFmHG16GUYRoAI6XvwXH_ZdRf8/view"
 
 [footer]
-headline = "Let's build something people love."
-line = "Open to interesting problems, collaborations and good conversations."
-note = "artwork generated with Python + SVG · refreshed daily by GitHub Actions"
+headline = ["Got a hard problem?", "*Let's build it.*"]
+contact = [
+  ["Email", "patilswayam96@gmail.com"],
+  ["Web", "swayampatil.vercel.app"],
+  ["LinkedIn", "in/swayampatil"],
+  ["GitHub", "Swayam26262"],
+]
+colophon = "Set in Instrument Serif, Instrument Sans & JetBrains Mono. Rendered from code, refreshed daily."

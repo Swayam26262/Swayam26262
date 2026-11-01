@@ -1,27 +1,31 @@
-"""'By the numbers' tiles whose digits roll into place like an odometer."""
+"""§02 impact as a bento grid: one feature cell, an accent cell, a hatched
+statement cell and small cells, sharing hard 1px rules. Serif numerals roll
+into place like an odometer."""
 
 from __future__ import annotations
 
 import re
 
 from core import fonts
-from core.icons import icon
+from core.design import CSS as BASE, W, card, hline, patterns, strip, vline
 from core.odometer import CSS as ODO_CSS, odometer
-from core.svg import document, esc, fit, num, text
+from core.svg import balance, document, fit, num, text
 from core.theme import Theme
 
-W, COLS, GAP, TILE_H = 840, 3, 12, 122
-SIZE = 36
-NUM = "u"   # Unbounded, same face as the name in the hero
+COL, ROW = 104, 112          # 8 columns x 3 rows on the 8pt grid
+TOP = 40
+# (impact index, col, row, col span, row span, numeral size, style)
+LAYOUT = [
+    (0, 0, 0, 4, 2, 120, "feature"),
+    (1, 4, 0, 2, 1, 56, "plain"),
+    (2, 6, 0, 2, 1, 56, "plain"),
+    (3, 4, 1, 4, 1, 64, "accent"),
+    (4, 0, 2, 2, 1, 56, "plain"),
+    (5, 2, 2, 2, 1, 56, "plain"),
+]
+NOTE = (4, 2, 4, 1)          # the hatched statement cell
 
-CSS = ODO_CSS + """
-.fx{animation:fx .7s ease-out both}
-@keyframes fx{from{opacity:0;transform:translateY(6px)}}
-.tile{animation:tile .7s cubic-bezier(.2,.8,.2,1) both}
-@keyframes tile{from{opacity:0;transform:translateY(14px)}}
-.bar{animation:bar 1.4s cubic-bezier(.3,.8,.2,1) both;transform-box:fill-box;transform-origin:left}
-@keyframes bar{from{transform:scaleX(0)}}
-"""
+CSS = BASE + ODO_CSS
 
 
 def split_value(value: str) -> tuple[str, str, str]:
@@ -29,61 +33,81 @@ def split_value(value: str) -> tuple[str, str, str]:
     return (m.group(1), m.group(2), m.group(3)) if m else ("", "", value)
 
 
-def tile(item: dict, x: float, y: float, w: float, theme: Theme, idx: int) -> tuple[str, str]:
-    color = getattr(theme, item.get("color", "indigo"))
-    delay = .15 + idx * .1
-    tid = f"t{idx}"
-    defs = (
-        f'<radialGradient id="g{tid}" cx="1" cy="0" r="1"><stop offset="0" stop-color="{color}" '
-        f'stop-opacity="{.22 * theme.glow + .04}"/><stop offset="1" stop-color="{color}" stop-opacity="0"/></radialGradient>'
-        f'<linearGradient id="l{tid}" x1="0" x2="1"><stop offset="0" stop-color="{color}"/>'
-        f'<stop offset="1" stop-color="{color}" stop-opacity="0"/></linearGradient>'
-        f'<clipPath id="c{tid}"><rect x="{num(x)}" y="{num(y + 38)}" width="{num(w)}" height="{num(SIZE * 1.25)}"/></clipPath>'
-    )
-    pad = 20
-    base = y + 38 + SIZE * 1.02
+def cell(item: dict, idx: int, x: float, y: float, w: float, h: float, size: float, style: str,
+         theme: Theme, delay: float) -> tuple[str, str]:
+    ink = theme.on_accent if style == "accent" else theme.ink
+    sub = theme.on_accent if style == "accent" else theme.muted
+    out = []
+    if style == "accent":
+        out.append(f'<rect x="{x + 1}" y="{y + 1}" width="{w - 1}" height="{h - 1}" fill="{theme.accent}"/>')
+    pad = 24 if style == "feature" else 16
+    context = item["context"].upper()
+    out.append(text(x + pad, y + pad + 9, f"{idx + 1:02d}", "mb", fill=ink if style == "accent" else theme.accent,
+                    size=10))
+    out.append(text(x + pad + 24, y + pad + 9, context, "m", fill=sub,
+                    size=fit("m", context, 10, w - 2 * pad - 24, 1.2), letter_spacing="1.2"))
     prefix, digits, suffix = split_value(item["value"])
-    small = SIZE * .56
+    label_y = y + h - pad
+    lines = balance("tm", item["label"], 16, w - 2 * pad) if style == "feature" else [item["label"]]
+    base = label_y - (24 * len(lines) + 16 if style == "feature" else 24)
+    small = size * .5
     cx = x + pad
     num_parts = []
     if prefix:
-        num_parts.append(f'<text class="{NUM} fx" x="{num(cx)}" y="{num(base)}" font-size="{num(small)}" '
-                         f'fill="{color}" style="animation-delay:{delay + .5:.2f}s">{esc(prefix)}</text>')
-        cx += fonts.width(NUM, prefix, small) + 3
-    rolled, rw = odometer(digits, cx, base, SIZE, theme.text, delay + .1, cls=NUM)
-    num_parts.append(f'<g clip-path="url(#c{tid})">{rolled}</g>')
-    cx += rw + 3
+        num_parts.append(text(cx, base, prefix, "si", fill=ink, size=size))
+        cx += fonts.width("si", prefix, size) + 2
+    rolled, rw = odometer(digits, cx, base, size, ink, delay, cls="sr")
+    clip_id = f"o{idx}"
+    defs = (f'<clipPath id="{clip_id}"><rect x="{num(x)}" y="{num(base - size * .95)}" width="{num(w)}" '
+            f'height="{num(size * 1.2)}"/></clipPath>')
+    num_parts.append(f'<g clip-path="url(#{clip_id})">{rolled}</g>')
+    cx += rw + 4
     if suffix:
-        num_parts.append(f'<text class="{NUM} fx" x="{num(cx)}" y="{num(base)}" font-size="{num(small)}" '
-                         f'fill="{color}" style="animation-delay:{delay + 1.2:.2f}s">{esc(suffix)}</text>')
-    body = (
-        f'<g class="tile" style="animation-delay:{delay:.2f}s">'
-        f'<rect x="{num(x + .5)}" y="{num(y + .5)}" width="{num(w - 1)}" height="{TILE_H - 1}" rx="14" '
-        f'fill="{theme.panel}" stroke="{theme.border}"/>'
-        f'<rect x="{num(x + 1)}" y="{num(y + 1)}" width="{num(w - 2)}" height="{TILE_H - 2}" rx="13.5" fill="url(#g{tid})"/>'
-        f'<rect class="bar" x="{num(x + 18)}" y="{num(y)}" width="{num(w * .55)}" height="2" rx="1" fill="url(#l{tid})" '
-        f'style="animation-delay:{delay + .3:.2f}s"/>'
-        + icon(item["icon"], x + pad, y + 17, 13, theme, color=color, stroke_width=2)
-        + text(x + pad + 20, y + 28, item["context"].upper(), "m", fill=theme.muted,
-               size=fit("m", item["context"].upper(), 9.5, w - pad * 2 - 20, 1.1), letter_spacing="1.1")
-        + "".join(num_parts)
-        + text(x + pad, y + TILE_H - 18, item["label"], "s", fill=theme.muted,
-               size=fit("s", item["label"], 13, w - pad * 2))
-        + "</g>"
-    )
-    return defs, body
+        num_parts.append(f'<g class="on" style="animation-delay:{delay + 1.2:.2f}s">'
+                         + text(cx, base, suffix, "si", fill=ink if style == "accent" else theme.accent, size=small)
+                         + "</g>")
+    out.append("".join(num_parts))
+    if style == "feature":
+        for i, line in enumerate(lines[::-1]):
+            out.append(text(x + pad, label_y - i * 24, line, "tm", fill=ink, size=16))
+    else:
+        out.append(text(x + pad, label_y, item["label"], "t", fill=ink,
+                        size=fit("t", item["label"], 14, w - 2 * pad)))
+    return defs, f'<g class="lift" style="animation-delay:{delay - .1:.2f}s">{"".join(out)}</g>'
 
 
 def render(profile: dict, theme: Theme, live: dict | None = None, today=None) -> str:
     items = profile["impact"]
-    rows = (len(items) + COLS - 1) // COLS
-    tw = (W - GAP * (COLS - 1)) / COLS
-    H = rows * TILE_H + (rows - 1) * GAP
-    defs, body = [], []
-    for i, item in enumerate(items):
-        r, c = divmod(i, COLS)
-        d, b = tile(item, c * (tw + GAP), r * (TILE_H + GAP), tw, theme, i)
+    sheet_w = W - 8
+    H = TOP + 3 * ROW + 8
+    defs, body = [patterns(theme)], [card(W, H, theme)]
+    body.append(strip(0, 0, sheet_w, "§02", "Impact", "Measured in production", theme))
+
+    # hatched statement cell (drawn first so the grid rules sit on top)
+    c, r, cs, rs = NOTE
+    nx, ny, nw, nh = c * COL, TOP + r * ROW, cs * COL, rs * ROW
+    body.append(f'<rect x="{nx + 1}" y="{ny + 1}" width="{nw - 2}" height="{nh - 2}" fill="url(#hatch)" '
+                f'opacity="{.45 if theme.dark else .3}"/>')
+    note = profile["copy"]["impact_note"]
+    label_w = fonts.width("si", note, 28) + 32
+    body.append(f'<g class="lift" style="animation-delay:1s"><rect x="{nx + 16.5}" y="{ny + 24.5}" '
+                f'width="{num(label_w)}" height="48" fill="{theme.paper}" stroke="{theme.ink}"/>'
+                + text(nx + 32, ny + 56, note, "si", fill=theme.ink, size=28)
+                + text(nx + 16, ny + nh - 16, "SOURCES: GOPARKEASY · AI RECEPTIONIST · FIXMYRESUME · INFOSYS", "m",
+                       fill=theme.muted, size=fit("m", "SOURCES: GOPARKEASY · AI RECEPTIONIST · FIXMYRESUME · INFOSYS",
+                                                  9, nw - 32, 1.2), letter_spacing="1.2")
+                + "</g>")
+
+    for n, (i, col, row, cspan, rspan, size, style) in enumerate(LAYOUT):
+        x, y = col * COL, TOP + row * ROW
+        d, b = cell(items[i], i, x, y, cspan * COL, rspan * ROW, size, style, theme, .25 + n * .12)
         defs.append(d)
         body.append(b)
+
+    # the grid: hard rules between cells
+    rules = [hline(0, sheet_w, TOP + ROW * 2 - 1, theme.ink), hline(4 * COL, sheet_w, TOP + ROW - 1, theme.ink),
+             vline(4 * COL - 1, TOP, TOP + 3 * ROW, theme.ink), vline(6 * COL - 1, TOP, TOP + ROW, theme.ink),
+             vline(2 * COL - 1, TOP + 2 * ROW, TOP + 3 * ROW, theme.ink)]
+    body.append(f'<g class="rule">{"".join(rules)}</g>')
     desc = "; ".join(f"{i['value']} {i['label']} ({i['context']})" for i in items)
     return document("".join(body), W, H, title="Impact, by the numbers", desc=desc, css=CSS, defs="".join(defs))

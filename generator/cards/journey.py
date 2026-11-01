@@ -1,90 +1,84 @@
-"""Career timeline: a track that draws itself left to right, lighting up each
-milestone as it passes. The final milestone keeps pulsing."""
+"""§03 trajectory: a serif heading on the left and a ledger of roles on the
+right, newest first, one row per milestone with hard rules between rows."""
 
 from __future__ import annotations
 
 from core import fonts
-from core.icons import icon
-from core.svg import balance, document, fit, num, text
+from core.design import CSS as BASE, W, card, hline, patterns, stamp_block, strip, vline
+from core.svg import document, fit, text
 from core.theme import Theme
 
-W, H = 840, 296
-TRACK_Y, X0, X1 = 150, 34, 806
-BLOCK_W, BLOCK_H = 226, 86
-DRAW = 2.6  # seconds for the track to reach the right edge
+SPLIT = 280
+ROW = 72
+TOP = 40
 
-CSS = """
-.trk{stroke-dasharray:1;animation:trk 2.6s cubic-bezier(.45,.05,.35,1) .2s both}
-@keyframes trk{from{stroke-dashoffset:1}to{stroke-dashoffset:0}}
-.comet{stroke-dasharray:.07 1.2;animation:comet 4.5s cubic-bezier(.5,0,.5,1) 3.2s infinite both}
-@keyframes comet{0%{stroke-dashoffset:.07;opacity:1}70%{stroke-dashoffset:-1.07;opacity:1}100%{stroke-dashoffset:-1.07;opacity:0}}
-.nd{animation:nd .6s cubic-bezier(.3,1.7,.5,1) both;transform-box:fill-box;transform-origin:center}
-@keyframes nd{from{opacity:0;transform:scale(0)}}
-.blk{animation:blk .7s cubic-bezier(.2,.8,.2,1) both}
-@keyframes blk{from{opacity:0;transform:translateY(var(--dy,8px))}}
-.stem{animation:stem .45s ease-out both;transform-box:fill-box}
-@keyframes stem{from{transform:scaleY(0)}}
-.pulse{animation:pulse 2.2s ease-out infinite both;transform-box:fill-box;transform-origin:center}
-@keyframes pulse{0%{opacity:0;transform:scale(1)}1%{opacity:.8}100%{opacity:0;transform:scale(3.2)}}
-"""
+
+def _heading(profile: dict, theme: Theme) -> tuple[str, float]:
+    copy = profile["copy"]
+    width = SPLIT - 64
+    lines = copy["journey_heading"]
+    size = min(fit("sr", line.strip("*"), 40, width) for line in lines)
+    out, y = [], TOP + 32 + size * .72
+    for line in lines:
+        italic = line.startswith("*")
+        out.append(text(32, y, line.strip("*"), "si" if italic else "sr",
+                        fill=theme.accent if italic else theme.ink, size=size))
+        y += size * .95
+    words, para, cur = copy["journey_text"].split(), [], ""
+    for word in words:
+        trial = f"{cur} {word}".strip()
+        if cur and fonts.width("t", trial, 14) > width:
+            para.append(cur)
+            cur = word
+        else:
+            cur = trial
+    para.append(cur)
+    y += 16
+    for line in para:
+        y += 24
+        out.append(text(32, y, line, "t", fill=theme.muted, size=14))
+    return f'<g class="lift" style="animation-delay:.15s">{"".join(out)}</g>', y
 
 
 def render(profile: dict, theme: Theme, live: dict | None = None, today=None) -> str:
-    items = profile["journey"]
-    n = len(items)
-    margin = 64
-    xs = [margin + i * (W - 2 * margin) / (n - 1) for i in range(n)]
-    g = theme.grad
-    defs = [
-        f'<linearGradient id="tg" gradientUnits="userSpaceOnUse" x1="{X0}" x2="{X1}" y1="0" y2="0">'
-        f'<stop offset="0" stop-color="{g[0]}"/><stop offset=".55" stop-color="{g[1]}"/>'
-        f'<stop offset="1" stop-color="{g[2]}"/></linearGradient>'
-        f'<filter id="soft" x="-50%" y="-300%" width="200%" height="700%"><feGaussianBlur stdDeviation="3"/></filter>'
-    ]
-    track = f"M{X0} {TRACK_Y}H{X1}"
-    body = [
-        f'<path d="{track}" stroke="{theme.border2}" stroke-width="2" stroke-linecap="round" stroke-dasharray="2 6"/>',
-        f'<path class="trk" d="{track}" pathLength="1" stroke="url(#tg)" stroke-width="2.5" stroke-linecap="round"/>',
-        f'<path class="comet" d="{track}" pathLength="1" stroke="#fff" stroke-opacity="{.9 if theme.dark else .95}" '
-        f'stroke-width="3" stroke-linecap="round" filter="url(#soft)"/>',
-    ]
-    for i, (item, x) in enumerate(zip(items, xs)):
-        color = getattr(theme, item.get("color", "indigo"))
-        t = .2 + DRAW * (x - X0) / (X1 - X0)
-        above = i % 2 == 0
-        top = TRACK_Y - 30 - BLOCK_H if above else TRACK_Y + 30
-        cx = min(max(x, BLOCK_W / 2 + 6), W - BLOCK_W / 2 - 6)
-        last = i == n - 1
+    items = list(reversed(profile["journey"]))   # newest first
+    sheet_w = W - 8
+    H = TOP + ROW * len(items) + 8
+    body = [card(W, H, theme)]
+    body.append(strip(0, 0, sheet_w, "§03", "Trajectory", f"{len(items)} milestones", theme))
+    body.append(vline(SPLIT, TOP, H - 8, theme.ink))
+    heading, text_end = _heading(profile, theme)
+    body.append(heading)
+    hatch_top = int(text_end + 40) + (-int(text_end + 40) % 8)
+    if H - 8 - hatch_top >= 96:
+        first = profile["journey"][0]["when"].upper()
+        body.append(stamp_block(0, hatch_top, SPLIT, H - 8 - hatch_top, f"{first} → NOW", theme))
 
-        # stem from the node to its text block
-        y_a, y_b = (TRACK_Y - 12, TRACK_Y - 26) if above else (TRACK_Y + 12, TRACK_Y + 26)
-        origin = "bottom" if above else "top"
-        body.append(f'<path class="stem" d="M{num(x)} {y_a}V{y_b}" stroke="{color}" stroke-width="1.5" '
-                    f'stroke-dasharray="{"2 3" if last else "none"}" style="transform-origin:{origin};'
-                    f'animation-delay:{t:.2f}s"/>')
-        # node
-        if last:
-            body.append(f'<circle class="pulse" cx="{num(x)}" cy="{TRACK_Y}" r="7" fill="{color}" '
-                        f'style="animation-delay:{t + .4:.2f}s"/>')
-        body.append(f'<g class="nd" style="animation-delay:{t:.2f}s">'
-                    f'<circle cx="{num(x)}" cy="{TRACK_Y}" r="8" fill="{theme.panel}" stroke="{color}" stroke-width="2.5"/>'
-                    f'<circle cx="{num(x)}" cy="{TRACK_Y}" r="3.2" fill="{color}"/></g>')
-
-        # text block, centred on the node (clamped to the canvas)
+    x0 = SPLIT
+    rows = []
+    for i, item in enumerate(items):
+        y = TOP + i * ROW
+        now = item["when"].lower() == "now"
         when = item["when"].upper()
-        ww = fonts.width("m", when, 10, 1.4)
-        lines = balance("s", item["note"], 11.5, BLOCK_W - 6)
-        title_size = fit("dm", item["title"], 15.5, BLOCK_W)
-        block = [
-            icon(item["icon"], cx - (ww + 17) / 2, top, 12, theme, color=color, stroke_width=2.2),
-            text(cx - (ww + 17) / 2 + 17, top + 10, when, "mb", fill=color, size=10, letter_spacing="1.4"),
-            text(cx, top + 32, item["title"], "dm", fill=theme.text, size=title_size, anchor="middle"),
-            text(cx, top + 50, item["org"], "sm", fill=theme.muted, size=12, anchor="middle"),
-        ]
-        for k, line in enumerate(lines):
-            block.append(text(cx, top + 69 + k * 15, line, "s", fill=theme.muted, size=11.5, anchor="middle"))
-        dy = "8px" if above else "-8px"
-        body.append(f'<g class="blk" style="--dy:{dy};animation-delay:{t + .12:.2f}s">{"".join(block)}</g>')
-
-    desc = "; ".join(f"{i['when']}: {i['title']}, {i['org']}" for i in items)
-    return document("".join(body), W, H, title="Journey so far", desc=desc, css=CSS, defs="".join(defs))
+        row = []
+        if now:
+            row.append(f'<rect x="{x0 + 1}" y="{y + 1}" width="{sheet_w - x0 - 2}" height="{ROW - 2}" fill="{theme.paper2}"/>')
+            row.append(f'<rect class="blip" x="{x0 + 24}" y="{y + 24}" width="8" height="8" fill="{theme.accent}"/>')
+            row.append(text(x0 + 40, y + 32, when, "mb", fill=theme.accent, size=11, letter_spacing="1.6"))
+        else:
+            row.append(text(x0 + 24, y + 32, when, "mb", fill=theme.ink, size=11, letter_spacing="1.6"))
+        tx = x0 + 128
+        row.append(text(tx, y + 32, item["title"], "tb", fill=theme.ink,
+                        size=fit("tb", item["title"], 16, 248)))
+        row.append(text(sheet_w - 24, y + 32, item["org"].upper(), "m", fill=theme.muted,
+                        size=fit("m", item["org"].upper(), 10, 160, 1.2), anchor="end", letter_spacing="1.2"))
+        row.append(text(tx, y + 54, item["note"], "t", fill=theme.muted,
+                        size=fit("t", item["note"], 14, sheet_w - 24 - tx)))
+        rows.append(f'<g class="slide" style="animation-delay:{.3 + i * .1:.2f}s">{"".join(row)}</g>')
+        if i:
+            rows.append(hline(x0, sheet_w, y - 1, theme.ink))
+    body.append("".join(rows))
+    # a hard spine through the date column
+    body.append(vline(x0 + 104, TOP, H - 8, theme.hair))
+    desc = "; ".join(f"{i['when']}: {i['title']}, {i['org']}" for i in profile["journey"])
+    return document("".join(body), W, H, title="Trajectory", desc=desc, css=BASE, defs=patterns(theme))

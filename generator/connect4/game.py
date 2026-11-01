@@ -1,7 +1,7 @@
 """Connect Four game state, board artwork and the README section.
 
-State lives in generator/data/connect4.json. Humans (yellow) always open;
-the AI (red) answers every human move straight away.
+State lives in generator/data/connect4.json. Humans (orange discs) always
+open; the AI (black discs) answers every human move straight away.
 """
 
 from __future__ import annotations
@@ -13,7 +13,8 @@ import re
 import urllib.parse
 from pathlib import Path
 
-from core.svg import document, num, text
+from core.design import CSS as BASE, SHADOW, box, card, patterns
+from core.svg import document, num, text, write
 from core.theme import THEMES, Theme
 
 from .engine import AI, COLS, HUMAN, ROWS, Board, choose, winning_cells
@@ -26,8 +27,6 @@ START, END = "<!-- CONNECT4:START -->", "<!-- CONNECT4:END -->"
 
 DEPTH = 6               # AI search depth (plies)
 CELL, PAD = 56, 16      # board geometry; buttons are CELL wide so they line up with the columns
-YELLOW = ("#fde047", "#eab308", "#a16207")
-RED = ("#fb7185", "#e11d48", "#9f1239")
 MOVE_RE = re.compile(r"^c4\|drop\|([1-7])$")
 
 
@@ -104,122 +103,116 @@ def play(state: dict, col: int, user: str, rng: random.Random | None = None,
 
 # ---- artwork -------------------------------------------------------------
 
-BOARD_CSS = """
-.drop{animation:drop .75s cubic-bezier(.33,0,.67,0) both}
-@keyframes drop{0%{transform:translateY(var(--from))}70%{transform:translateY(0)}82%{transform:translateY(-10px)}
-92%{transform:translateY(0)}96%{transform:translateY(-3px)}100%{transform:translateY(0)}}
-.halo{animation:halo 1.8s ease-out 2s infinite both;transform-box:fill-box;transform-origin:center}
-@keyframes halo{0%{opacity:0;transform:scale(1)}10%{opacity:.9}100%{opacity:0;transform:scale(1.5)}}
-.win{stroke-dasharray:1;animation:win 1s ease-out 1.6s both,glow 1.6s ease-in-out 2.6s infinite alternate}
+BOARD_CSS = BASE + """
+.drop{animation:drop .7s cubic-bezier(.5,0,.75,0) both}
+@keyframes drop{0%{transform:translateY(var(--from))}72%{transform:translateY(0)}84%{transform:translateY(-8px)}
+94%{transform:translateY(0)}100%{transform:translateY(0)}}
+.ring{animation:ring 1s steps(1,end) 2s infinite}
+@keyframes ring{50%{opacity:0}}
+.win{stroke-dasharray:1;animation:win .8s cubic-bezier(.7,0,.3,1) 1.6s both}
 @keyframes win{from{stroke-dashoffset:1}to{stroke-dashoffset:0}}
-@keyframes glow{to{stroke-opacity:.55}}
 """
 
 
-def disc(cx: float, cy: float, r: float, colors: tuple[str, str, str], gid: str) -> str:
-    return (f'<circle cx="{num(cx)}" cy="{num(cy)}" r="{num(r)}" fill="url(#{gid})"/>'
-            f'<circle cx="{num(cx)}" cy="{num(cy)}" r="{num(r * .68)}" fill="none" stroke="{colors[2]}" '
-            f'stroke-opacity=".35" stroke-width="2"/>'
-            f'<ellipse cx="{num(cx - r * .28)}" cy="{num(cy - r * .34)}" rx="{num(r * .3)}" ry="{num(r * .18)}" '
-            f'fill="#fff" fill-opacity=".35" transform="rotate(-30 {num(cx - r * .28)} {num(cy - r * .34)})"/>')
+def disc_colors(theme: Theme) -> dict:
+    return {HUMAN: theme.accent, AI: theme.ink}
 
 
 def board_svg(state: dict, theme: Theme) -> str:
+    """Flat board: paper face, hard rules, ink-ringed holes, solid discs."""
     board = Board.from_moves(state["moves"])
     w = COLS * CELL + 2 * PAD
     h_board = ROWS * CELL + 2 * PAD
-    H = h_board + 26
-    dark = theme.dark
-    frame = ("#312e81", "#1e1b4b") if dark else ("#6366f1", "#4338ca")
-    hole = theme.page if dark else "#eef2ff"
-    defs = (
-        f'<linearGradient id="fr" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="{frame[0]}"/>'
-        f'<stop offset="1" stop-color="{frame[1]}"/></linearGradient>'
-        f'<radialGradient id="dy" cx=".38" cy=".32" r=".75"><stop offset="0" stop-color="{YELLOW[0]}"/>'
-        f'<stop offset=".6" stop-color="{YELLOW[1]}"/><stop offset="1" stop-color="{YELLOW[2]}"/></radialGradient>'
-        f'<radialGradient id="dr" cx=".38" cy=".32" r=".75"><stop offset="0" stop-color="{RED[0]}"/>'
-        f'<stop offset=".6" stop-color="{RED[1]}"/><stop offset="1" stop-color="{RED[2]}"/></radialGradient>'
-        f'<filter id="gl" x="-20%" y="-20%" width="140%" height="140%"><feGaussianBlur stdDeviation="4"/></filter>'
-    )
-    r = CELL * .38
-    pieces, holes = [], []
-    grid = board.grid()
+    H = h_board + SHADOW + 32
+    r = CELL * .36
+    colors = disc_colors(theme)
     moves = state["moves"]
-    # which discs to animate: the latest human move and the AI's reply
     animate = {}
     replay = Board()
     for i, c in enumerate(moves):
         row = replay.play(c)
         if i >= len(moves) - 2 and state.get("last"):
-            animate[(c, row)] = .25 if i % 2 == 0 else 1.25
-    for ri, row in enumerate(grid):
+            animate[(c, row)] = .25 if i % 2 == 0 else 1.2
+    holes, pieces = [], []
+    for ri, row in enumerate(board.grid()):
         for c, cell in enumerate(row):
             cx = PAD + c * CELL + CELL / 2
             cy = PAD + ri * CELL + CELL / 2
-            holes.append(f'<circle cx="{num(cx)}" cy="{num(cy)}" r="{num(r + 1)}"/>')
+            holes.append(f'<circle cx="{num(cx)}" cy="{num(cy)}" r="{num(r)}"/>')
             if cell is None:
                 continue
-            body = disc(cx, cy, r, YELLOW if cell == HUMAN else RED, "dy" if cell == HUMAN else "dr")
-            bottom_row = ROWS - 1 - ri
-            delay = animate.get((c, bottom_row))
+            disc = f'<circle cx="{num(cx)}" cy="{num(cy)}" r="{num(r)}" fill="{colors[cell]}"/>'
+            delay = animate.get((c, ROWS - 1 - ri))
             if delay is not None:
-                body = (f'<g class="drop" style="--from:-{num(cy + CELL)}px;animation-delay:{delay}s">{body}</g>')
-                if cell == AI:
-                    body += (f'<circle class="halo" cx="{num(cx)}" cy="{num(cy)}" r="{num(r + 3)}" fill="none" '
-                             f'stroke="{RED[0]}" stroke-width="2.5"/>')
-            pieces.append(body)
+                disc = f'<g class="drop" style="--from:-{num(cy + CELL)}px;animation-delay:{delay}s">{disc}</g>'
+                if cell == AI:  # mark the AI's latest reply with a blinking square ring
+                    disc += (f'<rect class="ring" x="{num(cx - r - 4.5)}" y="{num(cy - r - 4.5)}" '
+                             f'width="{num(2 * r + 9)}" height="{num(2 * r + 9)}" fill="none" stroke="{theme.accent}" '
+                             f'stroke-width="2"/>')
+            pieces.append(disc)
     win_line = ""
     if state["status"] in ("humans", "ai"):
         cells = winning_cells(board.pieces[HUMAN if state["status"] == "humans" else AI])
         if cells:
             pts = [(PAD + c * CELL + CELL / 2, PAD + (ROWS - 1 - rr) * CELL + CELL / 2) for c, rr in cells]
             (x1, y1), (x2, y2) = pts[0], pts[-1]
-            seg = f"M{num(x1)} {num(y1)}L{num(x2)} {num(y2)}"
-            win_line = (f'<path class="win" d="{seg}" pathLength="1" stroke="#fff" stroke-width="12" stroke-opacity=".9" '
-                        f'stroke-linecap="round" filter="url(#gl)"/>'
-                        f'<path class="win" d="{seg}" pathLength="1" stroke="#fff" stroke-width="5" stroke-linecap="round"/>')
-    # discs sit behind the board face, which has holes punched through it (even-odd)
-    face = f"M14 0H{w - 14}a14 14 0 0 1 14 14V{h_board - 14}a14 14 0 0 1-14 14H14a14 14 0 0 1-14-14V14a14 14 0 0 1 14-14Z"
-    hole_paths = "".join(
-        f"M{num(PAD + c * CELL + CELL / 2 - r - 1)} {num(PAD + ri * CELL + CELL / 2)}"
-        f"a{num(r + 1)} {num(r + 1)} 0 1 0 {num(2 * r + 2)} 0a{num(r + 1)} {num(r + 1)} 0 1 0 -{num(2 * r + 2)} 0Z"
-        for ri in range(ROWS) for c in range(COLS))
-    body = (
-        f'<g fill="{hole}">{"".join(holes)}</g>'
-        + "".join(pieces)
-        + f'<path d="{face}{hole_paths}" fill="url(#fr)" fill-rule="evenodd"/>'
-        + f'<path d="{face}" fill="none" stroke="#fff" stroke-opacity=".12"/>'
-        + win_line
-        + "".join(text(PAD + c * CELL + CELL / 2, h_board + 18, str(c + 1), "mb", fill=theme.faint if dark else theme.muted,
-                       size=11, anchor="middle") for c in range(COLS))
-    )
+            stroke = theme.paper if state["status"] == "ai" else theme.ink
+            win_line = (f'<path class="win" d="M{num(x1)} {num(y1)}L{num(x2)} {num(y2)}" pathLength="1" '
+                        f'stroke="{stroke}" stroke-width="6" stroke-linecap="square"/>')
+    labels = "".join(text(PAD + c * CELL + CELL / 2, h_board + SHADOW + 21, str(c + 1), "mb", fill=theme.muted,
+                          size=11, anchor="middle") for c in range(COLS))
+    body = (card(w + SHADOW, h_board + SHADOW, theme)
+            + f'<g fill="{theme.paper2}" stroke="{theme.ink}">{"".join(holes)}</g>'
+            + "".join(pieces) + win_line + labels)
     status = {"playing": "your move", "humans": "humans win", "ai": "AI wins", "draw": "draw"}[state["status"]]
-    return document(body, w, H, title=f"Connect Four, game #{state['game']} ({status})",
-                    desc=f"Board after {len(moves)} moves.", css=BOARD_CSS, defs=defs)
+    return document(body, w + SHADOW, H, title=f"Connect Four, game #{state['game']} ({status})",
+                    desc=f"Board after {len(moves)} moves.", css=BOARD_CSS)
 
 
-BUTTON_CSS = """
-.bob{animation:bob 1.6s ease-in-out infinite}
-@keyframes bob{50%{transform:translateY(4px)}}
+BUTTON_CSS = BASE + """
+.bob{animation:bob 1.2s steps(2,end) infinite}
+@keyframes bob{50%{transform:translateY(3px)}}
 """
 
 
 def button_svg(col: int, theme: Theme, full: bool) -> str:
-    s = CELL
-    fill = theme.panel2 if theme.dark else "#ffffff"
+    """A column key. The first key carries the board's left padding so the row lines up."""
+    lead = PAD if col == 0 else 0
+    w, h = CELL + lead, 48
+    x = lead
     if full:
-        body = (f'<rect x="4.5" y="4.5" width="{s - 9}" height="{s - 9}" rx="13" fill="{fill}" stroke="{theme.border}" '
-                f'stroke-dasharray="3 3"/>'
-                + text(s / 2, s / 2 + 4, "FULL", "mb", fill=theme.faint, size=9, anchor="middle", letter_spacing="1"))
-        return document(body, s, s, title=f"Column {col + 1} is full")
-    body = (f'<rect x="4.5" y="4.5" width="{s - 9}" height="{s - 9}" rx="13" fill="{fill}" stroke="{theme.border2}"/>'
-            f'<g class="bob" style="animation-delay:{col * .12:.2f}s">'
-            f'<circle cx="{s / 2}" cy="{s / 2 - 4}" r="11" fill="url(#d)"/>'
-            f'<path d="M{s / 2 - 5} {s / 2 + 12}l5 5 5-5" stroke="{theme.muted}" stroke-width="2" fill="none" '
-            f'stroke-linecap="round" stroke-linejoin="round"/></g>')
-    defs = (f'<radialGradient id="d" cx=".38" cy=".32" r=".75"><stop offset="0" stop-color="{YELLOW[0]}"/>'
-            f'<stop offset=".6" stop-color="{YELLOW[1]}"/><stop offset="1" stop-color="{YELLOW[2]}"/></radialGradient>')
-    return document(body, s, s, title=f"Drop a disc in column {col + 1}", css=BUTTON_CSS, defs=defs)
+        body = (f'<rect x="{x}" y="0" width="{CELL}" height="{h}" fill="{theme.paper}"/>'
+                + f'<rect x="{x}" y="0" width="{CELL}" height="{h}" fill="url(#hatch)" opacity=".5"/>'
+                + box(x, 0, CELL, h, theme.ink)
+                + text(x + CELL / 2, 29, "FULL", "mb", fill=theme.ink, size=9, anchor="middle", letter_spacing="1.2"))
+        return document(body, w, h, title=f"Column {col + 1} is full", defs=patterns(theme), css=BASE)
+    body = (box(x, 0, CELL, h, theme.ink, theme.paper)
+            + text(x + 12, 20, f"{col + 1}", "mb", fill=theme.muted, size=10)
+            + f'<g class="bob" style="animation-delay:{col * .1:.1f}s">'
+            + f'<rect x="{x + CELL / 2 - 8}" y="18" width="16" height="16" fill="{theme.accent}"/>'
+            + f'<path d="M{x + CELL / 2 - 5} 38l5 5 5-5" stroke="{theme.ink}" stroke-width="1.5" fill="none" '
+              f'stroke-linecap="square"/></g>')
+    return document(body, w, h, title=f"Drop a disc in column {col + 1}", css=BUTTON_CSS)
+
+
+def header_svg(theme: Theme) -> str:
+    """§07 section header for the game, matching the other sheets."""
+    from core.design import W, strip
+    H = 40 + 96 + SHADOW
+    body = (card(W, H, theme) + strip(0, 0, W - SHADOW, "§07", "Play — humans vs. machine", "Connect Four", theme)
+            + text(32, 40 + 56, "One shared game.", "sr", fill=theme.ink, size=40)
+            + text(32 + _serif_width("One shared game. ", 40), 40 + 56, "You vs. my AI.", "si", fill=theme.accent, size=40)
+            + text(W - SHADOW - 24, 40 + 52, "PICK A COLUMN → PRESS CREATE ON THE ISSUE", "m", fill=theme.muted,
+                   size=9.5, anchor="end", letter_spacing="1.2")
+            + text(W - SHADOW - 24, 40 + 72, "THE AI REPLIES IN ABOUT A MINUTE", "m", fill=theme.muted,
+                   size=9.5, anchor="end", letter_spacing="1.2"))
+    return document(body, W, H, title="Play Connect Four against my AI",
+                    desc="Everyone on GitHub plays one shared game of Connect Four against my AI.", css=BASE)
+
+
+def _serif_width(s_: str, size: float) -> float:
+    from core import fonts
+    return fonts.width("sr", s_, size)
 
 
 def board_name(state: dict, theme: Theme) -> str:
@@ -227,25 +220,18 @@ def board_name(state: dict, theme: Theme) -> str:
 
 
 def write_assets(state: dict) -> list[Path]:
-    """Render buttons and the current board; drop boards from older states."""
+    """Render header, keys and the current board; drop boards from older states."""
     ASSET_DIR.mkdir(parents=True, exist_ok=True)
-    written = []
+    files = {}
     for theme in THEMES:
+        files[f"header-{theme.name}.svg"] = header_svg(theme)
         for col in range(COLS):
             for full in (False, True):
-                p = ASSET_DIR / f"col-{col + 1}{'-full' if full else ''}-{theme.name}.svg"
-                svg = button_svg(col, theme, full)
-                if not p.exists() or p.read_text() != svg:
-                    p.write_text(svg)
-                    written.append(p)
-        p = ASSET_DIR / board_name(state, theme)
-        svg = board_svg(state, theme)
-        if not p.exists() or p.read_text() != svg:
-            p.write_text(svg)
-            written.append(p)
-    keep = {board_name(state, t) for t in THEMES}
+                files[f"col-{col + 1}{'-full' if full else ''}-{theme.name}.svg"] = button_svg(col, theme, full)
+        files[board_name(state, theme)] = board_svg(state, theme)
+    written = [ASSET_DIR / name for name, svg in files.items() if write(ASSET_DIR / name, svg)]
     for old in ASSET_DIR.glob("board-*.svg"):
-        if old.name not in keep:
+        if old.name not in files:
             old.unlink()
             written.append(old)
     return written
@@ -275,57 +261,60 @@ def user_link(user: str) -> str:
 def readme_section(state: dict, repo: str) -> str:
     board = Board.from_moves(state["moves"])
     game, status, score = state["game"], state["status"], state["score"]
+    moves = len(state["moves"])
     if status == "humans":
-        headline = f"🎉 <b>The humans won game #{game}</b> in {len(state['moves'])} moves! Click any column to start game #{game + 1}."
+        headline = f"<b>Game {game}: the humans won</b> in {moves} moves. Any column starts game {game + 1}."
     elif status == "ai":
-        headline = f"🤖 <b>The AI won game #{game}.</b> Click any column to start game #{game + 1} and get revenge."
+        headline = f"<b>Game {game}: the AI won.</b> Any column starts game {game + 1}. Revenge is on the table."
     elif status == "draw":
-        headline = f"🤝 <b>Game #{game} is a draw.</b> Click any column to start game #{game + 1}."
-    elif not state["moves"]:
-        headline = f"<b>Game #{game}</b> · 🟡 humans vs 🔴 AI · you open. Pick a column 👇"
+        headline = f"<b>Game {game} is a draw.</b> Any column starts game {game + 1}."
+    elif not moves:
+        headline = f"<b>Game {game}</b>, move 1. You play orange and open; the AI plays black."
     else:
         ai = state["last"]["ai"] if state.get("last") else None
-        reply = f" The AI just played column {ai + 1}." if ai is not None else ""
-        headline = f"<b>Game #{game}</b> · move {len(state['moves']) + 1} · your turn, humans!{reply}"
+        reply = f" The AI just answered in column {ai + 1}." if ai is not None else ""
+        headline = f"<b>Game {game}</b>, move {moves + 1}. Your turn.{reply}"
 
     over = status != "playing"
-    buttons = []
+    keys = []
     for c in range(COLS):
         full = not over and not board.can_play(c)
         suffix = "-full" if full else ""
         img = picture(f"assets/connect4/col-{c + 1}{suffix}-dark.svg", f"assets/connect4/col-{c + 1}{suffix}-light.svg",
-                      f"Column {c + 1} is full" if full else f"Drop a disc in column {c + 1}", width=CELL)
-        buttons.append(img if full else f'<a href="{issue_url(repo, c)}">{img}</a>')
+                      f"Column {c + 1} is full" if full else f"Drop a disc in column {c + 1}",
+                      width=CELL + (PAD if c == 0 else 0))
+        keys.append(img if full else f'<a href="{issue_url(repo, c)}">{img}</a>')
+    header = picture("assets/connect4/header-dark.svg", "assets/connect4/header-light.svg",
+                     "Section 07, play: one shared game of Connect Four against my AI", width="100%")
     board_img = picture(f"assets/connect4/{board_name(state, THEMES[0])}",
                         f"assets/connect4/{board_name(state, THEMES[1])}",
-                        f"Connect Four board, game #{game}", width=COLS * CELL + 2 * PAD)
-    lines = [START, f'<p align="center">{headline}</p>',
-             f'<p align="center">{"".join(buttons)}<br>{board_img}</p>']
+                        f"Connect Four board, game {game}", width=COLS * CELL + 2 * PAD + SHADOW)
+    lines = [START, header, "", f"<p>{headline}</p>", f'<p>{"".join(keys)}<br>{board_img}</p>']
     last = state.get("last")
     if last:
         when = dt.datetime.fromisoformat(last["at"]).strftime("%d %b %Y, %H:%M UTC")
-        reply = f" · the AI replied in column {last['ai'] + 1}" if last.get("ai") is not None else ""
-        lines.append(f'<p align="center"><sub>Last move: {user_link(last["user"])} dropped in column '
-                     f'{last["human"] + 1}{reply} · {when}</sub></p>')
+        reply = f", the AI replied in column {last['ai'] + 1}" if last.get("ai") is not None else ""
+        lines.append(f'<p><sub>Last move: {user_link(last["user"])} played column {last["human"] + 1}{reply} '
+                     f'({when}).</sub></p>')
     movers = sorted(state["movers"].items(), key=lambda kv: (-kv[1], kv[0]))[:8]
     lines += [
         "<details>",
-        "<summary><b>Scoreboard, hall of fame and how it works</b></summary>",
+        "<summary><b>Scoreboard and how it works</b></summary>",
         "",
-        "| 🟡 Humans | 🔴 AI | 🤝 Draws |",
+        "| Humans | AI | Draws |",
         "| :-: | :-: | :-: |",
         f"| {score['humans']} | {score['ai']} | {score['draws']} |",
         "",
     ]
     if state["winners"]:
-        lines.append("**Winning moves:** " + " · ".join(
-            f"{user_link(w['user'])} (game #{w['game']})" for w in state["winners"][-6:][::-1]))
+        lines.append("**Winning moves:** " + " / ".join(
+            f"{user_link(w['user'])} (game {w['game']})" for w in state["winners"][-6:][::-1]))
         lines.append("")
     if movers:
-        lines.append("**Most moves played:** " + " · ".join(f"{user_link(u)} ×{n}" for u, n in movers))
+        lines.append("**Most moves played:** " + " / ".join(f"{user_link(u)} ×{n}" for u, n in movers))
         lines.append("")
     lines += [
-        "**How it works:** clicking a column opens a pre-filled issue. A GitHub Action reads it, drops your disc, "
+        "**How it works:** a column opens a pre-filled issue. A GitHub Action reads it, drops your disc, "
         f"lets a negamax AI with alpha-beta pruning ({DEPTH} plies deep) reply, redraws the board and commits this "
         "README. Everyone plays the same game, so coordinate in the issues if you want to win.",
         "",

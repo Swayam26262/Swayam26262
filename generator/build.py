@@ -9,6 +9,7 @@ from __future__ import annotations
 
 import argparse
 import datetime as dt
+import importlib
 import json
 import sys
 import tomllib
@@ -18,24 +19,18 @@ HERE = Path(__file__).resolve().parent
 sys.path.insert(0, str(HERE))
 
 import live as live_data  # noqa: E402
-from cards import buttons, footer, hero, impact, journey, projects, stack, telemetry, terminal  # noqa: E402
 from core.svg import write  # noqa: E402
 from core.theme import THEMES  # noqa: E402
 
 ROOT = HERE.parent
 ASSETS = ROOT / "assets"
 
-CARDS = {
-    "hero": hero.render,
-    "terminal": terminal.render,
-    "telemetry": telemetry.render,
-    "impact": impact.render,
-    "journey": journey.render,
-    "stack": stack.render,
-    "projects": projects.render,
-    "buttons": buttons.render,
-    "footer": footer.render,
-}
+# card name -> module in cards/ exposing render(profile, theme, live, today)
+CARDS = ("hero", "buttons", "about", "impact", "journey", "stack", "projects", "telemetry", "footer")
+
+
+def renderer(name: str):
+    return importlib.import_module(f"cards.{name}").render
 
 
 def load_profile() -> dict:
@@ -63,9 +58,10 @@ def main(argv: list[str] | None = None) -> int:
     if unknown:
         ap.error(f"unknown card(s): {', '.join(sorted(unknown))}")
     changed = 0
-    for name, render in CARDS.items():
+    for name in CARDS:
         if args.cards and name not in args.cards:
             continue
+        render = renderer(name)
         for theme in THEMES:
             result = render(profile, theme, data, today)
             # a card renders one SVG, or a {file stem: svg} dict for families like project cards

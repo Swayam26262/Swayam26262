@@ -1,78 +1,69 @@
-"""Closing banner that mirrors the hero: soft aurora, a gradient sign-off and
-three layers of waves rolling along the bottom edge."""
+"""§08 sign-off: a flat accent sheet with a serif headline on the left, a
+contact ledger on the right and a mono colophon strip along the bottom."""
 
 from __future__ import annotations
 
-import math
+import datetime as dt
 
-from core import fonts
-from core.svg import document, num, text
+from core.design import CSS as BASE, W, card, hline, strip, vline
+from core.motion import BLINK_CSS
+from core.svg import document, fit, text
 from core.theme import Theme
 
-W, H = 840, 210
-
-CSS = """
-.wv{animation:wv linear infinite}
-@keyframes wv{to{transform:translateX(-840px)}}
-.au{animation:au 16s ease-in-out infinite alternate;transform-box:fill-box;transform-origin:center}
-@keyframes au{to{transform:translate(30px,-10px) scale(1.1)}}
-.fi{animation:fi 1s ease-out both}
-@keyframes fi{from{opacity:0;transform:translateY(8px)}}
-.hb{animation:hb 1.6s ease-in-out infinite;transform-box:fill-box;transform-origin:center}
-@keyframes hb{0%,40%,100%{transform:scale(1)}20%{transform:scale(1.25)}}
-"""
-
-
-def wave(y: float, amp: float, length: float, phase: float) -> str:
-    """A sine wave two canvases wide, closed down to the bottom edge."""
-    pts = []
-    x = -10.0
-    while x <= 2 * W + 10:
-        pts.append(f"{num(x)} {num(y + amp * math.sin(2 * math.pi * x / length + phase))}")
-        x += 12
-    return f"M{pts[0]}L{'L'.join(pts[1:])}V{H}H-10Z"
+SPLIT = 520
+TOP = 40
+ROW = 48
 
 
 def render(profile: dict, theme: Theme, live: dict | None = None, today=None) -> str:
     foot = profile["footer"]
-    g = theme.grad
-    bg = ("#060a18", "#0a1230") if theme.dark else ("#ffffff", "#f3f5ff")
-    hw = fonts.width("d", foot["headline"], 26)
-    defs = (
-        f'<linearGradient id="bg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="{bg[0]}"/>'
-        f'<stop offset="1" stop-color="{bg[1]}"/></linearGradient>'
-        f'<linearGradient id="hg" gradientUnits="userSpaceOnUse" x1="{num((W - hw) / 2)}" x2="{num((W + hw) / 2)}" y1="0" y2="0">'
-        f'<stop offset="0" stop-color="{g[0]}"/><stop offset=".5" stop-color="{g[1]}"/><stop offset="1" stop-color="{g[2]}"/>'
-        f'</linearGradient>'
-        f'<radialGradient id="a"><stop offset="0" stop-color="{theme.indigo}" stop-opacity="{.45 * theme.glow}"/>'
-        f'<stop offset="1" stop-color="{theme.indigo}" stop-opacity="0"/></radialGradient>'
-        f'<clipPath id="p"><rect width="{W}" height="{H}" rx="20"/></clipPath>'
-    )
-    layers = [  # color, baseline, amplitude, wavelength, phase, seconds per loop, opacity
-        (g[0], H - 46, 7, 420, 0, 22, .22),
-        (g[1], H - 34, 9, 280, 1.3, 15, .28),
-        (g[2], H - 22, 6, 210, 2.1, 10, .32),
-    ]
-    waves = "".join(
-        f'<path class="wv" d="{wave(y, a, ln, ph)}" fill="{c}" fill-opacity="{num(op * (1 if theme.dark else .8))}" '
-        f'style="animation-duration:{s}s"/>' for c, y, a, ln, ph, s, op in layers
-    )
-    heart_x = W / 2 - fonts.width("m", foot["note"], 10, .8) / 2 - 16
-    body = (
-        f'<g clip-path="url(#p)"><rect width="{W}" height="{H}" fill="url(#bg)"/>'
-        f'<ellipse class="au" cx="{W / 2}" cy="40" rx="320" ry="120" fill="url(#a)"/>{waves}</g>'
-        f'<rect x=".5" y=".5" width="{W - 1}" height="{H - 1}" rx="19.5" stroke="{theme.border}"/>'
-        '<g class="fi" style="animation-delay:.2s">'
-        + text(W / 2, 64, foot["headline"], "d", fill="url(#hg)", size=26, anchor="middle")
-        + "</g>"
-        + '<g class="fi" style="animation-delay:.5s">'
-        + text(W / 2, 94, foot["line"], "s", fill=theme.muted, size=14, anchor="middle")
-        + "</g>"
-        + '<g class="fi" style="animation-delay:.8s">'
-        + f'<path class="hb" d="M{num(heart_x)} {H - 77}c-2-3-7-2.5-7 1.5 0 3 4 5.5 7 8 3-2.5 7-5 7-8 0-4-5-4.5-7-1.5Z" '
-          f'fill="{theme.pink}"/>'
-        + text(W / 2 + 8, H - 70, foot["note"], "m", fill=theme.faint if theme.dark else theme.muted, size=10,
-               anchor="middle", letter_spacing=".8")
-        + "</g>"
-    )
-    return document(body, W, H, title=foot["headline"], desc=f"{foot['line']} {foot['note']}", css=CSS, defs=defs)
+    today = today or dt.datetime.now(dt.timezone.utc).date()
+    ink = theme.on_accent
+    sheet_w = W - 8
+    rows = foot["contact"]
+    body_h = max(len(rows) * ROW, 192)
+    H = TOP + body_h + 40 + 8
+    out = [card(W, H, theme, fill=theme.accent, shadow=theme.ink)]
+    # the running header sits on the accent sheet, so draw it entirely in the on-accent ink
+    strip_theme = Theme(**{**theme.__dict__, "accent": ink, "ink": ink, "muted": ink})
+    out.append(strip(0, 0, sheet_w, "§08", "Contact", f"{profile['person']['location']}", strip_theme))
+
+    # headline
+    lines = foot["headline"]
+    size = min(fit("sr", line.strip("*"), 64, SPLIT - 64) for line in lines)
+    y = TOP + 32 + size * .72
+    head = []
+    for line in lines:
+        italic = line.startswith("*")
+        head.append(text(32, y, line.strip("*"), "si" if italic else "sr", fill=ink, size=size))
+        last_end = y
+        y += size * .95
+    out.append(f'<g class="lift" style="animation-delay:.15s">{"".join(head)}</g>')
+    out.append(f'<rect class="blink" x="{32 + 4 + _width_of(lines[-1], size)}" y="{last_end - size * .62}" '
+               f'width="{size * .08:.1f}" height="{size * .66:.1f}" fill="{ink}"/>')
+
+    # contact ledger
+    out.append(vline(SPLIT, TOP, TOP + body_h, ink))
+    for i, (label, value) in enumerate(rows):
+        ry = TOP + i * ROW
+        out.append(f'<g class="slide" style="animation-delay:{.3 + i * .08:.2f}s">'
+                   + text(SPLIT + 24, ry + 29, label.upper(), "m", fill=ink, size=10, letter_spacing="1.6")
+                   + text(SPLIT + 112, ry + 29, value, "tm", fill=ink, size=fit("tm", value, 14, sheet_w - SPLIT - 136))
+                   + "</g>")
+        out.append(hline(SPLIT, sheet_w, ry + ROW - 1, ink))
+
+    # colophon
+    cy = TOP + body_h
+    out.append(hline(0, sheet_w, cy, ink))
+    colophon = foot["colophon"].upper()
+    out.append(text(24, cy + 25, colophon, "m", fill=ink, size=fit("m", colophon, 9.5, sheet_w - 160, 1.2),
+                    letter_spacing="1.2"))
+    out.append(text(sheet_w - 24, cy + 25, f"REV. {today:%Y.%m}", "mb", fill=ink, size=10, anchor="end",
+                    letter_spacing="1.2"))
+    return document("".join(out), W, H, title=" ".join(line.strip("*") for line in lines),
+                    desc="; ".join(f"{k}: {v}" for k, v in rows), css=BASE + BLINK_CSS)
+
+
+def _width_of(line: str, size: float) -> float:
+    from core import fonts
+    return fonts.width("si" if line.startswith("*") else "sr", line.strip("*"), size)
