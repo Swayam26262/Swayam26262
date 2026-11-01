@@ -1,4 +1,4 @@
-"""Render every README artwork into assets/.
+"""Render every README artwork into assets/ (desktop) and assets/mobile/ (phones).
 
   python generator/build.py              # render everything from cached live data
   python generator/build.py --live       # refresh GitHub/LeetCode data first (GITHUB_TOKEN for GitHub)
@@ -26,11 +26,16 @@ ROOT = HERE.parent
 ASSETS = ROOT / "assets"
 
 # card name -> module in cards/ exposing render(profile, theme, live, today)
-CARDS = ("hero", "buttons", "about", "impact", "journey", "stack", "projects", "telemetry", "footer")
+CARDS = ("hero", "buttons", "about", "impact", "journey", "currently", "stack", "projects", "telemetry", "footer")
 
 
 def renderer(name: str):
     return importlib.import_module(f"cards.{name}").render
+
+
+def has_mobile(name: str) -> bool:
+    """Cards render a 408px phone layout too unless they opt out with MOBILE = False."""
+    return getattr(importlib.import_module(f"cards.{name}"), "MOBILE", True)
 
 
 def load_profile() -> dict:
@@ -62,15 +67,18 @@ def main(argv: list[str] | None = None) -> int:
         if args.cards and name not in args.cards:
             continue
         render = renderer(name)
-        for theme in THEMES:
-            result = render(profile, theme, data, today)
-            # a card renders one SVG, or a {file stem: svg} dict for families like project cards
-            outputs = result if isinstance(result, dict) else {name: result}
-            for stem, svg in outputs.items():
-                out = ASSETS / f"{stem}-{theme.name}.svg"
-                if write(out, svg):
-                    changed += 1
-                    print(f"updated {out.relative_to(ROOT)} ({out.stat().st_size / 1024:.1f} KB)")
+        layouts = (False, True) if has_mobile(name) else (False,)
+        for mobile in layouts:
+            folder = ASSETS / "mobile" if mobile else ASSETS
+            for theme in THEMES:
+                result = render(profile, theme, data, today, mobile=mobile)
+                # a card renders one SVG, or a {file stem: svg} dict for families like buttons
+                outputs = result if isinstance(result, dict) else {name: result}
+                for stem, svg in outputs.items():
+                    out = folder / f"{stem}-{theme.name}.svg"
+                    if write(out, svg):
+                        changed += 1
+                        print(f"updated {out.relative_to(ROOT)} ({out.stat().st_size / 1024:.1f} KB)")
     print(f"{changed} file(s) changed")
     return 0
 

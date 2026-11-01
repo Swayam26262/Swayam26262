@@ -1,31 +1,36 @@
 # Everything the README artwork says about me lives here.
 # Edit, push to main, and the "Profile refresh" workflow rebuilds every SVG.
 # Links and alt text live in README.md itself.
+#
+# Positioning: full-stack engineer first. Applied AI stays, in the back, and is
+# marked with the secondary teal wherever it appears.
 
 [person]
 name = "Swayam Patil"
 github = "Swayam26262"
-role = "Full-Stack & AI Engineer"
+role = "Full-Stack Engineer"
 location = "Mumbai, India"
 coords = "19.0760° N, 72.8777° E"
 github_joined = "2022-09-06"
+# Typed one after another in the hero. Keep each under 48 characters so they fit on phones too.
 taglines = [
-  "Full-Stack & AI Engineer @ GoParkEasy",
+  "Full-Stack Engineer @ GoParkEasy",
   "I ship production SaaS, first commit to live ops",
-  "Building RAG agents, voice AI & real-time systems",
-  "600+ endpoints · 3 queues · zero client polling",
+  "APIs, queues, caches & real-time that hold up",
+  "600+ endpoints · 57 collections · 0 polling",
+  "+ applied AI: RAG & voice, where it pays off",
 ]
-# Right-hand spec table in the hero.
+# Right-hand spec table in the hero. A row starting with "+" is drawn in the secondary teal.
 spec = [
   ["Based", "Mumbai, India"],
   ["Now", "Engineer @ GoParkEasy"],
-  ["Focus", "RAG / voice AI / real-time"],
-  ["Edu", "B.Tech CSE, 2025"],
+  ["Focus", "APIs / real-time / scale"],
+  ["+Also", "Applied AI: RAG, voice"],
   ["Status", "Shipping"],
 ]
 # The band that scrolls along the bottom of the hero.
-ticker = ["Full-stack engineer", "AI / LLM systems", "RAG + vector search", "Voice agents",
-          "Redis Streams", "BullMQ", "Next.js", "Node.js", "MongoDB", "System design"]
+ticker = ["Full-stack engineer", "Next.js", "Node.js", "TypeScript", "REST + WebSockets", "MongoDB",
+          "PostgreSQL", "Redis Streams", "BullMQ", "Docker", "System design", "+ applied AI"]
 
 [links]
 leetcode_user = "SwayamP"   # LeetCode stats in the console and telemetry
@@ -35,122 +40,121 @@ leetcode_user = "SwayamP"   # LeetCode stats in the console and telemetry
 exclude_languages = ["Jupyter Notebook"]
 
 [about]
-heading = ["Production systems,", "*with a brain.*"]
-bio = "Full-stack & AI engineer at GoParkEasy. I design the APIs, queues, caches and real-time pipes behind a parking platform, then wire LLMs into them so they actually earn their keep."
+heading = ["Production systems,", "*built to last.*"]
+bio = "Full-stack engineer at GoParkEasy. I build products end to end: React and Next.js up front; Node.js APIs, queues, caches and real-time pipes behind; Docker and CI to ship. LLM features when they earn their keep."
+# Console rows. A key starting with "+" is drawn in the secondary teal.
 neofetch = [
-  ["Role", "Full-Stack & AI Engineer @ GoParkEasy"],
-  ["Stack", "Next.js / Node / Mongo / Redis / BullMQ"],
-  ["AI", "RAG / vectors / tool-calling / voice"],
+  ["Role", "Full-Stack Engineer @ GoParkEasy"],
+  ["Front", "React / Next.js / TypeScript / Tailwind"],
+  ["Back", "Node / Express / REST / WebSockets / JWT"],
+  ["Data", "MongoDB / Postgres / Redis / BullMQ"],
+  ["Ship", "Docker / Nginx / AWS S3 / CI / Jest"],
+  ["+Also", "applied AI: RAG / tool-calling / voice"],
 ]
 # `code` is highlighted in the accent, **numbers** in bold.
 now = [
-  "Scaling a parking SaaS: **600+** endpoints, **57** collections",
-  "Shipped `ParkBuddy`: a RAG support agent on Gemini + Atlas",
-  "Hardening the core: Redis + LRU cache, `BullMQ`, Redis Streams",
-  "Side quests: `Intervexa` (AI interviews), `AI Receptionist`",
+  "Scaling a parking SaaS: **600+** endpoints, **57** collections, **6** roles",
+  "`BullMQ` pipeline: bookings, dead-letter & payment-timeout queues",
+  "Live spot updates on Redis Streams + `Socket.io`, zero polling",
+  "2-tier cache (Redis + in-process LRU) for hot availability reads",
+  "On the side: `ParkBuddy` RAG agent, `AI Receptionist` voice SaaS",
 ]
 
 # Section copy that isn't tied to one list.
 [copy]
 impact_note = "Shipped, measured, in production."
+impact_sources = "Sources: GoParkEasy production · AI Receptionist"
 journey_heading = ["From first commit", "*to production.*"]
 journey_text = "Two internships, one degree and a platform built from an empty repo. Newest first."
 
-# "By the numbers" bento. Digits roll like an odometer; everything else is static.
+# A small human section: what's on the desk this month. These are editable guesses
+# drawn from the resume and recent repos; keep them true. {leetcode} becomes the live
+# solved count. A label starting with "+" is drawn in the secondary teal.
+[currently]
+heading = ["Right now,", "*on my desk.*"]
+items = [
+  ["Building", "The next GoParkEasy release: bookings, payouts and the live spot map"],
+  ["Learning", "Event-driven architecture: streams, sagas and idempotent consumers"],
+  ["Practising", "Data structures & algorithms, {leetcode} LeetCode problems solved so far"],
+  ["+Exploring", "Agent workflows on top of solid APIs, like an AI job-search assistant"],
+]
+
+# "By the numbers" bento: the first item is the big feature cell, the fourth is the
+# orange cell. Digits roll like an odometer; everything else is static.
+# kind = "ai" marks a stat as applied AI (drawn in the secondary teal).
 [[impact]]
 value = "600+"
-label = "REST endpoints shipped to a production parking SaaS, across bookings, refunds and vendor payouts"
+label = "REST endpoints in a production parking SaaS: bookings, refunds, vendor payouts"
 context = "GoParkEasy · parking SaaS"
-color = "cyan"
-icon = "glyph:code"
 
 [[impact]]
 value = "57"
-label = "MongoDB collections, 6 user roles"
+label = "collections, 6 user roles"
 context = "GoParkEasy · data model"
-color = "indigo"
-icon = "glyph:database"
+
+[[impact]]
+value = "3"
+label = "BullMQ queues, auto-retry"
+context = "GoParkEasy · queues"
+
+[[impact]]
+value = "0"
+label = "client polling: live spot updates over Redis Streams + Socket.io"
+context = "GoParkEasy · real-time"
+
+[[impact]]
+value = "2"
+label = "cache tiers: Redis + LRU"
+context = "GoParkEasy · caching"
 
 [[impact]]
 value = "<100ms"
-label = "voice-agent replies on top intents"
-context = "Voice AI · Retell"
-color = "pink"
-icon = "glyph:mic"
+label = "voice-agent replies"
+context = "Applied AI · voice"
+kind = "ai"
 
-[[impact]]
-value = "+35%"
-label = "ATS match score uplift, results in <5s"
-context = "FixMyResume · Gemini + NLP"
-color = "amber"
-icon = "glyph:file"
-
-[[impact]]
-value = "85%"
-label = "classification accuracy on live traffic"
-context = "BikeWatch · YOLOv5"
-color = "green"
-icon = "glyph:eye"
-
-[[impact]]
-value = "12"
-label = "business verticals on one voice agent"
-context = "AI Receptionist · SaaS"
-color = "violet"
-icon = "glyph:sparkle"
-
-# Career timeline, oldest first. The last entry pulses as "now".
+# Career timeline, oldest first (drawn newest first). kind = "ai" draws the date in teal.
 [[journey]]
 when = "Dec 2021"
 title = "B.Tech, Computer Science"
 org = "DYPCOE · Kolhapur"
-note = "Fell for Python, ML and shipping side projects"
-color = "cyan"
-icon = "glyph:cap"
+note = "Fell for building and shipping side projects"
 
 [[journey]]
 when = "May 2024"
 title = "Machine Learning Intern"
 org = "Infosys Springboard"
-note = "Led BikeWatch: YOLOv5 + DeepSORT vehicle tracking"
-color = "green"
-icon = "glyph:eye"
+note = "Led BikeWatch, a YOLOv5 + DeepSORT vision pipeline"
+kind = "ai"
 
 [[journey]]
 when = "Jun 2025"
 title = "Graduated, CGPA 8.2"
 org = "DYPCOE · Kolhapur"
-note = "Plus FixMyResume and a few AI products on the side"
-color = "amber"
-icon = "glyph:rocket"
+note = "Plus FixMyResume and other full-stack side projects"
 
 [[journey]]
 when = "Aug 2025"
 title = "Full-Stack Engineer Intern"
 org = "GoParkEasy · Remote"
-note = "Architected the parking platform from scratch"
-color = "indigo"
-icon = "glyph:code"
+note = "Architected the platform from scratch: QR check-in, PDF invoicing"
 
 [[journey]]
 when = "Nov 2025"
-title = "Full-Stack & AI Engineer"
+title = "Full-Stack Engineer"
 org = "GoParkEasy · Mumbai"
-note = "ParkBuddy RAG agent, BullMQ, Redis Streams"
-color = "pink"
-icon = "glyph:sparkle"
+note = "Bookings & payouts, BullMQ, Redis Streams; plus a RAG support agent"
 
 [[journey]]
 when = "Now"
 title = "Building what's next"
-org = "Open to big problems"
-note = "AI products that feel fast, reliable and human"
-color = "violet"
-icon = "glyph:bolt"
+org = "Open to hard problems"
+note = "Products that feel fast, reliable and human"
 
-# Tech stack as a periodic table: 39 elements, 13 x 3. Each item is
-# [symbol, name, icon slug from data/icons.json]. `style` sets the group's flat treatment:
-# accent | paper | paper2 | ink | accent-text | dots
+# Tech stack as a periodic table: 39 elements (13 x 3 on desktop, 5 x 8 on phones).
+# Each item is [symbol, name, icon slug from data/icons.json]. `style` sets the group's
+# flat treatment: accent | paper | paper2 | ink | dots | teal. Full-stack groups lead;
+# applied AI sits at the end in teal.
 [[stack]]
 label = "Languages"
 style = "accent"
@@ -165,120 +169,105 @@ items = [["Re", "React", "react"], ["Nx", "Next.js", "nextdotjs"], ["Tw", "Tailw
 
 [[stack]]
 label = "Backend"
-style = "paper2"
-items = [["Nd", "Node.js", "nodedotjs"], ["Ex", "Express", "express"], ["Dj", "Django", "django"],
-         ["Fa", "FastAPI", "fastapi"], ["Io", "Socket.io", "socketdotio"], ["Jw", "JWT", "jsonwebtokens"]]
+style = "ink"
+items = [["Nd", "Node.js", "nodedotjs"], ["Ex", "Express", "express"], ["Ap", "REST APIs", "glyph:code"],
+         ["Ws", "WebSockets", "glyph:bolt"], ["Io", "Socket.io", "socketdotio"], ["Jw", "JWT", "jsonwebtokens"],
+         ["Dj", "Django", "django"], ["Fa", "FastAPI", "fastapi"]]
 
 [[stack]]
 label = "Data & queues"
-style = "ink"
+style = "paper2"
 items = [["Mg", "MongoDB", "mongodb"], ["Pg", "Postgres", "postgresql"], ["Rd", "Redis", "redis"],
-         ["Sb", "Supabase", "supabase"], ["Bq", "BullMQ", "glyph:queue"], ["Rs", "Streams", "glyph:bolt"]]
+         ["Rs", "Streams", "redis"], ["Bq", "BullMQ", "glyph:queue"], ["Sb", "Supabase", "supabase"]]
 
 [[stack]]
-label = "AI / ML"
-style = "accent-text"
-items = [["Gm", "Gemini", "googlegemini"], ["Gp", "GPT-4o", "glyph:sparkle"], ["Rg", "RAG", "glyph:vector"],
-         ["Rt", "Retell AI", "glyph:mic"], ["Pt", "PyTorch", "pytorch"], ["Tf", "TensorFlow", "tensorflow"],
-         ["Cv", "OpenCV", "opencv"], ["Yo", "YOLOv5", "glyph:eye"]]
-
-[[stack]]
-label = "DevOps & QA"
+label = "Ship & test"
 style = "dots"
-items = [["Dk", "Docker", "docker"], ["Ng", "NGINX", "nginx"], ["S3", "AWS S3", "aws"], ["Vc", "Vercel", "vercel"],
-         ["Ga", "GH Actions", "githubactions"], ["Je", "Jest", "jest"], ["Pw", "Playwright", "glyph:browser"],
-         ["Sn", "SonarQube", "sonarqubeserver"], ["Pp", "Puppeteer", "puppeteer"]]
+items = [["Dk", "Docker", "docker"], ["Dc", "Compose", "docker"], ["Ng", "NGINX", "nginx"], ["S3", "AWS S3", "aws"],
+         ["Vc", "Vercel", "vercel"], ["Ga", "GH Actions", "githubactions"], ["Gt", "Git", "git"],
+         ["Je", "Jest", "jest"], ["Pw", "Playwright", "glyph:browser"], ["Sn", "SonarQube", "sonarqubeserver"],
+         ["Pp", "Puppeteer", "puppeteer"]]
 
-# Featured project cards (one SVG each, so every card links somewhere).
-# The first project is the feature cell of the bento. motif: wave | chat | gauge | chart | write | play
+[[stack]]
+label = "Applied AI"
+style = "teal"
+items = [["Gm", "Gemini", "googlegemini"], ["Gp", "GPT-4o", "glyph:sparkle"], ["Rg", "RAG", "glyph:vector"],
+         ["Rt", "Retell AI", "glyph:mic"]]
+
+# Projects bento: the first is the feature cell, then two in the right column and
+# three along the bottom (the fourth slot is the narrow one).
+# motif: wave | chat | gauge | chart | write | play
 [[projects]]
 slug = "ai-receptionist"
-blurb = "Voice agent that books, waitlists and escalates via LLM tool-calling."
 name = "AI Receptionist"
-kind = "Voice AI · SaaS"
-color = "pink"
-icon = "glyph:mic"
+kind = "Multi-tenant SaaS · Next.js + Supabase"
 motif = "wave"
 url = "https://voicecallassistant.com"
 badge = "Live"
-summary = "A real-time voice agent that books appointments, runs waitlists and hands off to humans via LLM tool-calling. A SaaS for **12** business verticals, with PII encryption and row-level security."
-tags = ["Next.js", "Supabase", "Retell AI", "GPT-4o-mini"]
-
-[[projects]]
-slug = "intervexa"
-blurb = "Mock interviews that adapt to every answer, in 8 languages."
-name = "Intervexa"
-kind = "AI interview simulator"
-color = "indigo"
-icon = "glyph:chat"
-motif = "chat"
-url = "https://github.com/Swayam26262/Intervexa"
-badge = "Code"
-summary = "Mock interviews that adapt to every answer: technical, coding, system design and behavioral rounds, voice in **8** languages, and a memory of your weak spots for the next session."
-tags = ["Next.js 15", "MongoDB", "Gemini · Claude", "Auth.js"]
-
-[[projects]]
-slug = "fixmyresume"
-blurb = "Scores resumes against a JD: +35% ATS match in under 5s."
-name = "FixMyResume"
-kind = "LLM resume optimizer"
-color = "amber"
-icon = "glyph:file"
-motif = "gauge"
-url = "https://github.com/Swayam26262/FixMyResume"
-badge = "Code"
-summary = "Scores a resume against a job description and rewrites the gaps. **+35%** ATS match in under **5s**, served by a JWT-secured Python API that holds **100+** RPM."
-tags = ["Django", "React", "PostgreSQL", "Gemini"]
-
-[[projects]]
-slug = "datastory"
-blurb = "CSV in, a narrated data story out."
-name = "DataStory AI"
-kind = "AI data storytelling"
-color = "cyan"
-icon = "glyph:chart"
-motif = "chart"
-url = "https://github.com/Swayam26262/Data-Story"
-badge = "Code"
-summary = "Drop in a CSV, get a story: automated statistical analysis, an AI-written narrative and scrollytelling charts, exported as a polished PDF report."
-tags = ["Next.js", "FastAPI", "MongoDB", "Gemini"]
+summary = "A multi-tenant SaaS for **12** business verticals: call logs, scheduling, analytics and billing, secured with PII encryption and Postgres row-level security. A voice agent on top books, waitlists and escalates."
+blurb = "Multi-tenant SaaS with billing, analytics and RLS, plus a voice agent."
+tags = ["Next.js", "Supabase", "Postgres RLS", "+Retell AI"]
 
 [[projects]]
 slug = "writeflow"
-blurb = "Full publishing platform on serverless Postgres."
 name = "WriteFlow"
-kind = "Full-stack blogging"
-color = "green"
-icon = "glyph:pen"
+kind = "Full-stack publishing"
 motif = "write"
 url = "https://write-flow-delta.vercel.app"
 badge = "Live"
 summary = "A complete publishing platform: roles, a rich-text editor, media uploads, comments, likes, search and an admin dashboard, on serverless Postgres."
+blurb = "Roles, rich text, media, comments and admin, on serverless Postgres."
 tags = ["Next.js 15", "Neon Postgres", "TipTap", "JWT"]
 
 [[projects]]
+slug = "fixmyresume"
+name = "FixMyResume"
+kind = "Django REST + React"
+motif = "gauge"
+url = "https://github.com/Swayam26262/FixMyResume"
+badge = "Code"
+summary = "A JWT-secured Python API on PostgreSQL that holds **100+** RPM behind a React app; it scores a resume against a job description and suggests rewrites."
+blurb = "JWT-secured Django API at 100+ RPM behind React; LLM scoring on top."
+tags = ["Django", "React", "PostgreSQL", "JWT"]
+
+[[projects]]
+slug = "intervexa"
+name = "Intervexa"
+kind = "Next.js 15 full-stack"
+motif = "chat"
+url = "https://github.com/Swayam26262/Intervexa"
+badge = "Code"
+summary = "Auth, billing, a live code runner and progress analytics around adaptive mock interviews in 8 languages."
+blurb = "Auth, billing and a live code runner around adaptive mock interviews."
+tags = ["Next.js 15", "MongoDB", "Auth.js", "Razorpay"]
+
+[[projects]]
 slug = "yt2notes"
-blurb = "YouTube videos into AI study notes."
 name = "YT2Notes"
-kind = "Video → study notes"
-color = "red"
-icon = "glyph:play"
+kind = "Django + React"
 motif = "play"
 url = "https://github.com/Swayam26262/YT2Notes"
 badge = "Code"
-summary = "Paste a YouTube link, get organized study notes: transcripts are summarized by AI into structured notes you can keep, with Google sign-in."
-tags = ["Django", "React", "Google OAuth", "LLM"]
+summary = "Paste a YouTube link, get organized study notes, with Google sign-in."
+blurb = "Google OAuth, transcripts and saved study notes."
+tags = ["Django", "React", "Google OAuth"]
 
-# Contact buttons under the hero (one SVG each so each can be a link). The first is the primary.
+[[projects]]
+slug = "datastory"
+name = "DataStory AI"
+kind = "Next.js + FastAPI"
+motif = "chart"
+url = "https://github.com/Swayam26262/Data-Story"
+badge = "Code"
+summary = "CSV upload to S3, a FastAPI analysis service and scrollytelling charts, exported as a PDF report."
+blurb = "S3 uploads, a FastAPI analysis service, scrollytelling charts."
+tags = ["Next.js", "FastAPI", "MongoDB", "AWS S3"]
+
+# Contact buttons (one SVG each so each can be a link). The first is the primary.
 [[buttons]]
 slug = "email"
 label = "Email"
 url = "mailto:patilswayam96@gmail.com"
-
-[[buttons]]
-slug = "portfolio"
-label = "Portfolio"
-url = "https://swayampatil.vercel.app"
 
 [[buttons]]
 slug = "linkedin"
@@ -286,21 +275,27 @@ label = "LinkedIn"
 url = "https://www.linkedin.com/in/swayampatil"
 
 [[buttons]]
-slug = "leetcode"
-label = "LeetCode"
-url = "https://leetcode.com/SwayamP/"
+slug = "portfolio"
+label = "Portfolio"
+url = "https://swayampatil.vercel.app"
 
 [[buttons]]
 slug = "resume"
 label = "Resume"
-url = "https://drive.google.com/file/d/1P1EvdPLFmHG16GUYRoAI6XvwXH_ZdRf8/view"
+url = "https://drive.google.com/drive/folders/15f6B4v9IBmS63BxAaGDT52auG1MBA1Co"
+
+[[buttons]]
+slug = "leetcode"
+label = "LeetCode"
+url = "https://leetcode.com/SwayamP/"
 
 [footer]
 headline = ["Got a hard problem?", "*Let's build it.*"]
 contact = [
   ["Email", "patilswayam96@gmail.com"],
-  ["Web", "swayampatil.vercel.app"],
   ["LinkedIn", "in/swayampatil"],
+  ["Web", "swayampatil.vercel.app"],
+  ["Resume", "Google Drive folder"],
   ["GitHub", "Swayam26262"],
 ]
 colophon = "Set in Instrument Serif, Instrument Sans & JetBrains Mono. Rendered from code, refreshed daily."

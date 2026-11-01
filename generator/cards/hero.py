@@ -1,22 +1,22 @@
 """Hero sheet: the name set huge in Instrument Serif rising out of its slot,
 an identicon pixel matrix on a flat orange block, a spec table, a typing line
-and a ticker band running along the bottom."""
+and a ticker band running along the bottom.
+
+Desktop puts the name and the spec table side by side; phones stack them."""
 
 from __future__ import annotations
 
 import math
 
 from core import fonts
-from core.design import CSS as BASE, W, box, card, hline, patterns, strip, vline
+from core.design import CSS as BASE, box, canvas, card, hline, patterns, secondary, snap, strip, vline
 from core.motion import BLINK_CSS, TypedLine, typing_cycle
-from core.svg import document, num, text
+from core.svg import document, fit, num, text
 from core.theme import Theme
 
-H = 472                  # canvas (sheet is 464 + 8px block shadow)
-SHEET_W, SHEET_H = W - 8, H - 8
-SPLIT = 544              # left column width
-TICKER_Y, TICKER_H = 424, 40
 IDENTICON = ["11011", "11111", "00100", "01110", "11111"]
+SPEC_ROW = 40
+TICKER_H = 40
 
 CSS = BASE + BLINK_CSS + """
 .tick{animation:tick linear infinite}
@@ -24,118 +24,132 @@ CSS = BASE + BLINK_CSS + """
 """
 
 
-def _name(person: dict, theme: Theme) -> tuple[str, str]:
+def name_block(person: dict, theme: Theme, x: float, top: float, width: float, max_size: float):
+    """Two lines, first name roman, last name in orange italic, each glyph rising out of a slot."""
     first, last = person["name"].split(" ", 1)
     roman, italic = fonts.font("sr"), fonts.font("si")
-    max_w = SPLIT - 64
-    size = min(152, max_w / (roman.width(first, 1)), max_w / (italic.width(last + ".", 1)))
-    cap = .7 * size
-    base1 = 112 + cap
+    size = min(max_size, width / roman.width(first, 1), width / italic.width(last + ".", 1))
+    base1 = top + .7 * size
     base2 = base1 + .84 * size
     defs, body = [], []
     k = 0
     for line, (word, face, color, base) in enumerate(((first, roman, theme.ink, base1),
                                                      (last + ".", italic, theme.accent, base2))):
-        top = base - size * .92
-        defs.append(f'<clipPath id="n{line}"><rect x="0" y="{num(top)}" width="{SPLIT}" '
+        defs.append(f'<clipPath id="n{line}"><rect x="0" y="{num(base - size * .92)}" width="{num(x + width + 8)}" '
                     f'height="{num(size * 1.2)}"/></clipPath>')
-        x = 32.0
+        cx = x
         glyphs = []
         for ch in word:
-            d = face.path(ch, x, base, size)
+            d = face.path(ch, cx, base, size)
             glyphs.append(f'<g class="rise" style="animation-delay:{.15 + k * .05:.2f}s"><path d="{d}" fill="{color}"/></g>')
-            x += face.width(ch, size)
+            cx += face.width(ch, size)
             k += 1
         body.append(f'<g clip-path="url(#n{line})">{"".join(glyphs)}</g>')
-    return "".join(defs), "".join(body)
+    return "".join(defs), "".join(body), base2 + .3 * size
 
 
-def _emblem(theme: Theme) -> str:
+def emblem(theme: Theme, x: float, y: float, w: float, cell_w: float) -> tuple[str, float]:
     """Identicon from the GitHub avatar as a 5x5 matrix of flat bars on the orange block."""
-    x0, y0, cw, ch, gap = SPLIT + 8, 40 + 16, 48, 24, 8
-    out = [f'<rect x="{SPLIT + 1}" y="40" width="{SHEET_W - SPLIT - 2}" height="184" fill="{theme.accent}"/>']
+    cell_h, gap, pad = (16 if cell_w > 56 else 24), 8, 16
+    height = pad * 2 + 5 * cell_h + 4 * gap
+    x0 = x + (w - (5 * cell_w + 4 * gap)) / 2
+    out = [f'<rect x="{num(x + 1)}" y="{num(y)}" width="{num(w - 2)}" height="{num(height)}" fill="{theme.accent}"/>']
     order = 0
     for r, row in enumerate(IDENTICON):
         for c, on in enumerate(row):
-            x, y = x0 + c * (cw + gap), y0 + r * (ch + gap)
+            cx, cy = x0 + c * (cell_w + gap), y + pad + r * (cell_h + gap)
             if on == "1":
-                out.append(f'<rect class="on" x="{x}" y="{y}" width="{cw}" height="{ch}" fill="{theme.on_accent}" '
-                           f'style="animation-delay:{.3 + order * .045:.2f}s"/>')
+                out.append(f'<rect class="on" x="{num(cx)}" y="{num(cy)}" width="{cell_w}" height="{cell_h}" '
+                           f'fill="{theme.on_accent}" style="animation-delay:{.3 + order * .045:.2f}s"/>')
             else:
-                out.append(box(x, y, cw, ch, theme.on_accent))
+                out.append(box(cx, cy, cell_w, cell_h, theme.on_accent))
             order += 1
-    return "".join(out)
+    return "".join(out), height
 
 
-def _spec(rows: list[list[str]], theme: Theme) -> str:
+def spec_table(rows: list[list[str]], theme: Theme, x: float, y: float, w: float) -> str:
     out = []
-    y = 224
+    value_x = x + 96
     for i, (label, value) in enumerate(rows):
+        label, extra = secondary(label)
         live = label.lower() == "status"
-        row = (text(SPLIT + 16, y + 25, label.upper(), "m", fill=theme.muted, size=10, letter_spacing="1.6")
-               + text(SPLIT + 96 + (16 if live else 0), y + 25, value, "tm", fill=theme.ink, size=14))
+        color = theme.teal if extra else theme.ink
+        label_color = theme.teal if extra else theme.muted
+        vx = value_x + (16 if live else 0)
+        row = (text(x + 16, y + 25, label.upper(), "m", fill=label_color, size=10, letter_spacing="1.6")
+               + text(vx, y + 25, value, "tm", fill=color, size=fit("tm", value, 14, x + w - 16 - vx)))
         if live:
-            row += f'<rect class="blip" x="{SPLIT + 96}" y="{y + 15}" width="8" height="8" fill="{theme.accent}"/>'
+            row += f'<rect class="blip" x="{value_x}" y="{y + 15}" width="8" height="8" fill="{theme.accent}"/>'
         out.append(f'<g class="slide" style="animation-delay:{.55 + i * .08:.2f}s">{row}</g>')
         if i:
-            out.append(hline(SPLIT, SHEET_W, y - 1, theme.ink))
-        y += 40
+            out.append(hline(x, x + w, y - 1, theme.ink))
+        y += SPEC_ROW
     return "".join(out)
 
 
-def _ticker(items: list[str], theme: Theme) -> tuple[str, str]:
+def ticker(items: list[str], theme: Theme, y: float, width: float) -> tuple[str, str]:
     size, ls = 11, 1.6
-    unit = "".join(f"{item.upper()}  ■  " for item in items)
     face = fonts.font("m")
-    width = sum(face.advance(c) for c in unit) * size / face.upm + ls * len(unit)
-    copies = math.ceil((SHEET_W + width) / width) + 1
-    base = TICKER_Y + 25
-    runs = []
-    for k in range(copies):
-        spans = []
-        for item in items:
-            spans.append(f'{item.upper()}  <tspan fill="{theme.accent}">■</tspan>  ')
-        runs.append(f'<text x="{num(k * width)}" y="{base}" class="m" font-size="{size}" letter-spacing="{ls}" '
-                    f'fill="{theme.paper}" xml:space="preserve">{"".join(spans)}</text>')
-    defs = f'<clipPath id="tk"><rect x="1" y="{TICKER_Y}" width="{SHEET_W - 2}" height="{TICKER_H - 1}"/></clipPath>'
-    body = (f'<rect x="1" y="{TICKER_Y}" width="{SHEET_W - 2}" height="{TICKER_H - 1}" fill="{theme.ink}"/>'
-            f'<g clip-path="url(#tk)"><g class="tick" style="--shift:-{num(width)}px;animation-duration:{width / 38:.1f}s">'
-            f'{"".join(runs)}</g></g>')
+    unit = "".join(f"{secondary(item)[0].upper()}  ■  " for item in items)
+    run_w = sum(face.advance(c) for c in unit) * size / face.upm + ls * len(unit)
+    copies = math.ceil((width + run_w) / run_w) + 1
+    spans = []
+    for item in items:
+        label, extra = secondary(item)
+        fill = f' fill="{theme.teal_inv}"' if extra else ""
+        spans.append(f'<tspan{fill}>{label.upper()}</tspan>  <tspan fill="{theme.accent}">■</tspan>  ')
+    runs = "".join(f'<text x="{num(k * run_w)}" y="{y + 25}" class="m" font-size="{size}" letter-spacing="{ls}" '
+                   f'fill="{theme.paper}" xml:space="preserve">{"".join(spans)}</text>' for k in range(copies))
+    defs = f'<clipPath id="tk"><rect x="1" y="{y}" width="{num(width - 2)}" height="{TICKER_H - 1}"/></clipPath>'
+    body = (hline(0, width, y - 1, theme.ink)
+            + f'<rect x="1" y="{y}" width="{num(width - 2)}" height="{TICKER_H - 1}" fill="{theme.ink}"/>'
+            + f'<g clip-path="url(#tk)"><g class="tick" style="--shift:-{num(run_w)}px;'
+              f'animation-duration:{run_w / 38:.1f}s">{runs}</g></g>')
     return defs, body
 
 
-def render(profile: dict, theme: Theme, live: dict | None = None, today=None) -> str:
+def typing(person: dict, theme: Theme, x: float, y: float, size: float) -> tuple[str, str]:
+    cw = fonts.width("m", "M", size)
+    lines = [TypedLine(t, x + 24, cw) for t in person["taglines"]]
+    defs, body = typing_cycle(lines, y=y, size=size, cls="m", fill=theme.ink, cursor_fill=theme.accent,
+                              uid="ty", lead=1.6)
+    return defs, text(x, y, "→", "m", fill=theme.accent_text, size=size) + body
+
+
+def render(profile: dict, theme: Theme, live: dict | None = None, today=None, mobile: bool = False) -> str:
     person = profile["person"]
-    defs = [patterns(theme)]
-    body = [card(W, H, theme)]
-    body.append(strip(0, 0, SHEET_W, "§00", f"Profile sheet — {person['name']}",
-                      f"{person['coords']}", theme))
-    body.append(vline(SPLIT, 40, TICKER_Y, theme.ink))
+    W = canvas(mobile)
+    sheet_w = W - 8
+    defs, body = [patterns(theme)], []
+    right = person["location"] if mobile else person["coords"]
+    head = strip(0, 0, sheet_w, "§00", "Profile sheet" if mobile else f"Profile sheet — {person['name']}", right, theme)
+    kicker = ('<g class="on" style="animation-delay:.1s">'
+              + text(24 if mobile else 32, 80, person["role"].upper(), "mb", fill=theme.accent_text, size=11,
+                     letter_spacing="2") + "</g>")
 
-    # left column: kicker, name, typing line
-    body.append('<g class="on" style="animation-delay:.1s">'
-                + text(32, 80, person["role"].upper(), "mb", fill=theme.accent, size=11, letter_spacing="2")
-                + "</g>")
-    name_defs, name = _name(person, theme)
-    defs.append(name_defs)
-    body.append(name)
-    body.append(text(32, 392, "→", "m", fill=theme.accent, size=13))
-    cw = fonts.width("m", "M", 13)
-    lines = [TypedLine(t, 56, cw) for t in person["taglines"]]
-    tdefs, typed = typing_cycle(lines, y=392, size=13, cls="m", fill=theme.ink, cursor_fill=theme.accent,
-                                uid="ty", lead=1.6)
-    defs.append(tdefs)
-    body.append(typed)
-
-    # right column: emblem + spec table
-    body.append(_emblem(theme))
-    body.append(hline(SPLIT, SHEET_W, 223, theme.ink))
-    body.append(_spec(person["spec"], theme))
-
-    tick_defs, tick = _ticker(person["ticker"], theme)
-    defs.append(tick_defs)
-    body.append(hline(0, SHEET_W, TICKER_Y - 1, theme.ink))
-    body.append(tick)
-
+    if mobile:
+        name_defs, name, name_end = name_block(person, theme, 24, 104, sheet_w - 48, 120)
+        type_y = snap(name_end + 16)
+        tdefs, typed = typing(person, theme, 24, type_y, 11)
+        emblem_top = snap(type_y + 24)
+        mark, mark_h = emblem(theme, 0, emblem_top, sheet_w, 64)
+        spec_top = emblem_top + mark_h
+        ticker_y = spec_top + SPEC_ROW * len(person["spec"])
+        H = ticker_y + TICKER_H + 8
+        parts = [head, kicker, name, typed, hline(0, sheet_w, emblem_top - 1, theme.ink), mark,
+                 hline(0, sheet_w, spec_top - 1, theme.ink), spec_table(person["spec"], theme, 0, spec_top, sheet_w)]
+    else:
+        split = 544
+        name_defs, name, _ = name_block(person, theme, 32, 112, split - 64, 152)
+        ticker_y = 424
+        H = ticker_y + TICKER_H + 8
+        tdefs, typed = typing(person, theme, 32, 392, 13)
+        mark, mark_h = emblem(theme, split, 40, sheet_w - split, 48)
+        parts = [head, vline(split, 40, ticker_y, theme.ink), kicker, name, typed, mark,
+                 hline(split, sheet_w, 40 + mark_h - 1, theme.ink),
+                 spec_table(person["spec"], theme, split, 40 + mark_h, sheet_w - split)]
+    tick_defs, tick = ticker(person["ticker"], theme, ticker_y, sheet_w)
+    defs += [name_defs, tdefs, tick_defs]
+    body = [card(W, H, theme)] + parts + [tick]
     return document("".join(body), W, H, title=f"{person['name']} — {person['role']}",
                     desc=" · ".join(person["taglines"]), css=CSS, defs="".join(defs))

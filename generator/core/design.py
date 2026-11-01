@@ -4,21 +4,33 @@ Rules of the system:
   * 8pt grid: every box, padding and gap is a multiple of 8.
   * Flat fills only. Depth comes from hard 1px rules and solid offset blocks.
   * Display type is Instrument Serif, text is Instrument Sans, utilities are mono.
+  * Every sheet exists twice: 840px for desktop and 408px for phones.
 """
 
 from __future__ import annotations
 
-from .svg import num, text
+from . import fonts
+from .svg import esc, fit, num, text
 from .theme import Theme
 
 G = 8            # the grid unit
 SHADOW = 8       # offset of the solid block shadow
-W = 105 * G      # 840: canvas width of a full-width spread
+W = 105 * G      # 840: desktop canvas width
+MW = 51 * G      # 408: phone canvas width
 
 
 def u(n: float) -> float:
     """n grid units in px."""
     return n * G
+
+
+def canvas(mobile: bool) -> int:
+    return MW if mobile else W
+
+
+def secondary(label: str) -> tuple[str, bool]:
+    """A leading '+' marks an item as secondary (applied AI): drawn in teal."""
+    return (label[1:], True) if label.startswith("+") else (label, False)
 
 
 def hline(x1: float, x2: float, y: float, color: str, width: float = 1) -> str:
@@ -45,13 +57,22 @@ def card(w: float, h: float, theme: Theme, *, fill: str | None = None, shadow: s
             + box(0, 0, sw, sh, theme.ink, fill or theme.paper))
 
 
-def strip(x: float, y: float, w: float, index: str, title: str, right: str, theme: Theme) -> str:
-    """Running header: '§02  TITLE ............ RIGHT' over a hard rule. 40px tall."""
+def strip(x: float, y: float, w: float, index: str, title: str, right: str, theme: Theme,
+          index_color: str | None = None) -> str:
+    """Running header: '§02  TITLE ............ RIGHT' over a hard rule. 40px tall.
+
+    The right-hand label is dropped when it would collide with the title (narrow sheets).
+    """
     base = y + 25
-    return (text(x + 24, base, index, "mb", fill=theme.accent, size=10, letter_spacing="1")
-            + text(x + 64, base, title.upper(), "m", fill=theme.ink, size=10, letter_spacing="1.6")
-            + text(x + w - 24, base, right.upper(), "m", fill=theme.muted, size=10, anchor="end", letter_spacing="1.6")
-            + hline(x, x + w, y + 39, theme.ink))
+    title = title.upper()
+    right = right.upper()
+    title_end = x + 64 + fonts.width("m", title, 10, 1.6)
+    right_w = fonts.width("m", right, 10, 1.6)
+    out = (text(x + 24, base, index, "mb", fill=index_color or theme.accent_text, size=10, letter_spacing="1")
+           + text(x + 64, base, title, "m", fill=theme.ink, size=fit("m", title, 10, w - 88, 1.6), letter_spacing="1.6"))
+    if right and title_end + 24 + right_w <= x + w - 24:
+        out += text(x + w - 24, base, right, "m", fill=theme.muted, size=10, anchor="end", letter_spacing="1.6")
+    return out + hline(x, x + w, y + 39, theme.ink)
 
 
 def patterns(theme: Theme) -> str:
@@ -59,8 +80,6 @@ def patterns(theme: Theme) -> str:
     return (
         f'<pattern id="hatch" width="8" height="8" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">'
         f'<path d="M0 0V8" stroke="{theme.ink}" stroke-width="1"/></pattern>'
-        f'<pattern id="hatch-a" width="8" height="8" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">'
-        f'<path d="M0 0V8" stroke="{theme.accent}" stroke-width="2"/></pattern>'
         f'<pattern id="dots" width="8" height="8" patternUnits="userSpaceOnUse">'
         f'<rect x="3.5" y="3.5" width="1" height="1" fill="{theme.faint}"/></pattern>'
     )
@@ -68,7 +87,6 @@ def patterns(theme: Theme) -> str:
 
 def stamp_block(x: float, y: float, w: float, h: float, label: str, theme: Theme) -> str:
     """Hatched texture block with a hard rule on top and a mono label in a paper box."""
-    from . import fonts  # local import keeps design.py free of font loading at import time
     lw = fonts.width("m", label, 10, 1.6) + 1.6 + 32
     return (f'<rect x="{num(x + 1)}" y="{num(y)}" width="{num(w - 1)}" height="{num(h - 1)}" fill="url(#hatch)" '
             f'opacity="{.5 if theme.dark else .35}"/>'
@@ -78,12 +96,54 @@ def stamp_block(x: float, y: float, w: float, h: float, label: str, theme: Theme
             + text(x + 48, y + h - 44, label, "m", fill=theme.ink, size=10, letter_spacing="1.6"))
 
 
-def corner_marks(x: float, y: float, w: float, h: float, color: str, size: float = 8) -> str:
-    """Print registration ticks in the four corners of a region."""
-    out = []
-    for cx, cy, dx, dy in ((x, y, 1, 1), (x + w, y, -1, 1), (x, y + h, 1, -1), (x + w, y + h, -1, -1)):
-        out.append(f'<path d="M{num(cx)} {num(cy + dy * size)}V{num(cy)}H{num(cx + dx * size)}" stroke="{color}"/>')
-    return "".join(out)
+def wrap(content: str, cls: str, size: float, width: float, limit: int | None = None) -> list[str]:
+    """Greedy word wrap using real glyph advances; an ellipsis marks truncation."""
+    lines, cur = [], ""
+    for word in content.split():
+        trial = f"{cur} {word}".strip()
+        if cur and fonts.width(cls, trial, size) > width:
+            lines.append(cur)
+            cur = word
+        else:
+            cur = trial
+    lines.append(cur)
+    if limit and len(lines) > limit:
+        lines = lines[:limit]
+        lines[-1] = lines[-1].rstrip(",.;:") + "…"
+    return lines
+
+
+def serif_heading(lines: list[str], x: float, top: float, width: float, theme: Theme,
+                  max_size: float = 40) -> tuple[str, float]:
+    """Stacked serif heading; a line wrapped in *asterisks* is set in orange italic.
+    Returns (markup, baseline of the last line)."""
+    size = min(fit("sr", line.strip("*"), max_size, width) for line in lines)
+    out, y = [], top + size * .72
+    for i, line in enumerate(lines):
+        if i:
+            y += size * .95
+        italic = line.startswith("*")
+        out.append(text(x, y, line.strip("*"), "si" if italic else "sr",
+                        fill=theme.accent if italic else theme.ink, size=size))
+    return "".join(out), y
+
+
+def paragraph(content: str, x: float, top: float, width: float, fill: str, *, size: float = 14,
+              leading: float = 24, cls: str = "t") -> tuple[str, float]:
+    """Wrapped body text whose first baseline sits `leading` below `top`.
+    Returns (markup, last baseline)."""
+    out, y = [], top
+    for line in wrap(content, cls, size, width):
+        y += leading
+        out.append(f'<text x="{num(x)}" y="{num(y)}" class="{cls}" font-size="{num(size)}" fill="{fill}">'
+                   f'{esc(line)}</text>')
+    return "".join(out), y
+
+
+def snap(v: float) -> int:
+    """Round up to the 8pt grid."""
+    v = int(-(-v // 1))
+    return v + (-v % G)
 
 
 # Motion vocabulary: mechanical, no fades-from-glow. Everything ends on a crisp frame.

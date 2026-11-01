@@ -1,5 +1,7 @@
-"""§05 selected work as a bento grid: an inverted feature cell for the lead
-project and five editorial cells, each with a small flat motif that loops."""
+"""§06 selected work as a bento grid: an inverted feature cell for the lead
+project and five editorial cells, each with a small flat motif that loops.
+Phones get the feature on top and the rest in a two-column grid. Tags with a
+leading "+" (applied AI) are drawn in teal."""
 
 from __future__ import annotations
 
@@ -7,14 +9,17 @@ import random
 import re
 
 from core import fonts
-from core.design import CSS as BASE, W, card, hline, patterns, strip, vline
-from core.svg import document, num, text
-from core.theme import Theme, mix
+from core.design import CSS as BASE, box, canvas, card, patterns, secondary, strip, wrap
+from core.svg import document, fit, num, text
+from core.theme import Theme
 
 TOP = 40
-# (x, y, w, h) for the six cells on the 8pt grid; the first is the feature
-CELLS = [(0, TOP, 520, 320), (520, TOP, 312, 160), (520, TOP + 160, 312, 160),
-         (0, TOP + 320, 312, 176), (312, TOP + 320, 208, 176), (520, TOP + 320, 312, 176)]
+# (x, y, w, h) below the running header; the first cell is the feature
+DESKTOP = [(0, 0, 520, 320), (520, 0, 312, 160), (520, 160, 312, 160),
+           (0, 320, 312, 176), (312, 320, 208, 176), (520, 320, 312, 176)]
+MOBILE = [(0, 0, 400, 304), (0, 304, 200, 168), (200, 304, 200, 168),
+          (0, 472, 200, 168), (200, 472, 200, 168), (0, 640, 200, 168)]
+MOBILE_FILLER = (200, 640, 200, 168)
 
 CSS = BASE + """
 .eq{animation:eq 1.2s cubic-bezier(.7,0,.3,1) infinite alternate;transform-box:fill-box;transform-origin:bottom}
@@ -32,22 +37,6 @@ CSS = BASE + """
 .nt{animation:nt 5s steps(1,end) infinite}
 @keyframes nt{0%,49%{opacity:0}50%,100%{opacity:1}}
 """
-
-
-def wrap(content: str, cls: str, size: float, width: float, limit: int) -> list[str]:
-    lines, cur = [], ""
-    for word in content.split():
-        trial = f"{cur} {word}".strip()
-        if cur and fonts.width(cls, trial, size) > width:
-            lines.append(cur)
-            cur = word
-        else:
-            cur = trial
-    lines.append(cur)
-    if len(lines) > limit:
-        lines = lines[:limit]
-        lines[-1] = lines[-1].rstrip(",.;:") + "…"
-    return lines
 
 
 # ---- motifs: flat strokes and blocks in a w x h box at (x, y) ---------------
@@ -113,52 +102,84 @@ def status(project: dict) -> str:
     return f'{project.get("badge", "Code").upper()} ↗'
 
 
-def feature(p: dict, x: float, y: float, w: float, h: float, theme: Theme) -> str:
+def tag_line(tags: list[str], x: float, y: float, fill: str, teal: str, size: float) -> str:
+    spans = []
+    for i, tag in enumerate(tags):
+        label, extra = secondary(tag)
+        if i:
+            spans.append("  /  ")
+        spans.append(f'<tspan fill="{teal}">{label.upper()}</tspan>' if extra else label.upper())
+    return (f'<text x="{num(x)}" y="{num(y)}" class="m" font-size="{size}" letter-spacing="1.2" fill="{fill}" '
+            f'xml:space="preserve">{"".join(spans)}</text>')
+
+
+def feature(p: dict, x: float, y: float, w: float, h: float, theme: Theme, mobile: bool) -> str:
     bg, fg = theme.ink, theme.paper
-    soft = mix(theme.paper, theme.ink, .32)
-    pad = 32
+    soft = theme.soft_inv
+    pad = 24 if mobile else 32
+    name_size = 48 if mobile else 64
+    kind = p["kind"].upper()
     out = [f'<rect x="{x + 1}" y="{y + 1}" width="{w - 2}" height="{h - 2}" fill="{bg}"/>',
-           text(x + pad, y + pad + 9, "01", "mb", fill=theme.accent, size=10),
+           text(x + pad, y + pad + 9, "01", "mb", fill=theme.accent_inv, size=10),
            text(x + pad + 24, y + pad + 9, "FEATURED", "m", fill=fg, size=10, letter_spacing="1.6"),
-           text(x + w - pad, y + pad + 9, status(p), "mb", fill=theme.accent, size=10, anchor="end", letter_spacing="1.6")]
-    out.append(text(x + pad, y + 128, p["name"], "sr", fill=fg, size=64))
-    out.append(text(x + pad, y + 156, p["kind"].upper(), "m", fill=theme.accent, size=11, letter_spacing="1.8"))
+           text(x + w - pad, y + pad + 9, status(p), "mb", fill=theme.accent_inv, size=10, anchor="end", letter_spacing="1.6"),
+           text(x + pad, y + pad + 32 + name_size * .72, p["name"], "sr", fill=fg, size=name_size)]
+    kind_y = y + pad + 32 + name_size * .72 + 28
+    out.append(text(x + pad, kind_y, kind, "m", fill=theme.accent_inv, size=10 if mobile else 11, letter_spacing="1.6"))
     plain = re.sub(r"\*\*(.+?)\*\*", r"\1", p["summary"])
-    for i, line in enumerate(wrap(plain, "t", 15, w - 2 * pad, 3)):
-        out.append(text(x + pad, y + 200 + i * 24, line, "t", fill=soft, size=15))
-    out.append(text(x + pad, y + h - pad + 4, "  /  ".join(t.upper() for t in p["tags"]), "m", fill=fg, size=10,
-                    letter_spacing="1.2", xml_space="preserve"))
-    out.append(MOTIFS[p["motif"]](x + w - pad - 112, y + h - pad - 24, 112, 24, fg, theme.accent))
+    size, leading = (13, 20) if mobile else (15, 24)
+    for i, line in enumerate(wrap(plain, "t", size, w - 2 * pad, 4)):
+        out.append(text(x + pad, kind_y + 32 + i * leading, line, "t", fill=soft, size=size))
+    tags_y = y + h - pad + 4
+    out.append(tag_line(p["tags"], x + pad, tags_y, fg, theme.teal_inv, 9.5 if mobile else 10))
+    if not mobile:  # beside the title, clear of the summary and tags
+        out.append(MOTIFS[p["motif"]](x + w - pad - 112, y + pad + 48, 112, 32, fg, theme.accent_inv))
     return "".join(out)
 
 
-def small(p: dict, index: int, x: float, y: float, w: float, h: float, theme: Theme) -> str:
+def small(p: dict, index: int, x: float, y: float, w: float, h: float, theme: Theme, mobile: bool) -> str:
     pad = 24 if w > 240 else 16
-    base = y + 72
-    out = [text(x + pad, y + pad + 9, f"{index:02d}", "mb", fill=theme.accent, size=10),
+    name_size = 28 if mobile else 32
+    base = y + pad + 48
+    out = [text(x + pad, y + pad + 9, f"{index:02d}", "mb", fill=theme.accent_text, size=10),
            text(x + w - pad, y + pad + 9, status(p), "mb", fill=theme.ink, size=10, anchor="end", letter_spacing="1.4"),
-           text(x + pad, base, p["name"], "sr", fill=theme.ink, size=32),
-           text(x + pad, base + 20, p["kind"].upper(), "m", fill=theme.muted, size=9.5, letter_spacing="1.4")]
-    name_w = fonts.width("sr", p["name"], 32)
-    motif_w = 48
-    if name_w + motif_w + 16 <= w - 2 * pad:
-        out.append(MOTIFS[p["motif"]](x + w - pad - motif_w, base - 24, motif_w, 24, theme.ink, theme.accent))
-    for i, line in enumerate(wrap(p["blurb"], "t", 13, w - 2 * pad, 2)):
-        out.append(text(x + pad, base + 48 + i * 20, line, "t", fill=theme.muted, size=13))
+           text(x + pad, base, p["name"], "sr", fill=theme.ink, size=name_size)]
+    kind = p["kind"].upper()
+    out.append(text(x + pad, base + 20, kind, "m", fill=theme.muted, size=fit("m", kind, 9.5, w - 2 * pad, 1.4),
+                    letter_spacing="1.4"))
+    name_w = fonts.width("sr", p["name"], name_size)
+    if not mobile and name_w + 48 + 16 <= w - 2 * pad:
+        out.append(MOTIFS[p["motif"]](x + w - pad - 48, base - 24, 48, 24, theme.ink, theme.accent))
+    size, leading = (12, 16) if mobile else (13, 20)
+    for i, line in enumerate(wrap(p["blurb"], "t", size, w - 2 * pad, 3 if mobile else 2)):
+        out.append(text(x + pad, base + 44 + i * leading, line, "t", fill=theme.muted, size=size))
     return "".join(out)
 
 
-def render(profile: dict, theme: Theme, live: dict | None = None, today=None) -> str:
-    projects = profile["projects"][:len(CELLS)]
+def render(profile: dict, theme: Theme, live: dict | None = None, today=None, mobile: bool = False) -> str:
+    projects = profile["projects"][:6]
+    W = canvas(mobile)
     sheet_w = W - 8
-    H = TOP + 320 + 176 + 8
-    body = [card(W, H, theme)]
-    body.append(strip(0, 0, sheet_w, "§05", "Selected work", f"{len(projects)} projects · links below", theme))
-    for i, (p, (x, y, w, h)) in enumerate(zip(projects, CELLS)):
-        cell = feature(p, x, y, w, h, theme) if i == 0 else small(p, i + 1, x, y, w, h, theme)
+    layout = MOBILE if mobile else DESKTOP
+    grid_h = max(y + h for _, y, _, h in layout + ([MOBILE_FILLER] if mobile else []))
+    H = TOP + grid_h + 8
+    body = [card(W, H, theme),
+            strip(0, 0, sheet_w, "§06", "Selected work", f"{len(projects)} projects · links below", theme)]
+    rules = []
+    for i, (p, (x, y, w, h)) in enumerate(zip(projects, layout)):
+        y += TOP
+        cell = feature(p, x, y, w, h, theme, mobile) if i == 0 else small(p, i + 1, x, y, w, h, theme, mobile)
         body.append(f'<g class="lift" style="animation-delay:{.15 + i * .1:.2f}s">{cell}</g>')
-    rules = [vline(519, TOP, TOP + 496, theme.ink), hline(520, sheet_w, TOP + 159, theme.ink),
-             hline(0, sheet_w, TOP + 319, theme.ink), vline(311, TOP + 320, TOP + 496, theme.ink)]
+        rules.append(box(x, y, w, h, theme.ink))
+    if mobile:
+        fx, fy, fw, fh = MOBILE_FILLER
+        fy += TOP
+        body.append(f'<rect x="{fx + 1}" y="{fy + 1}" width="{fw - 2}" height="{fh - 2}" fill="url(#hatch)" '
+                    f'opacity="{.5 if theme.dark else .35}"/>'
+                    f'<rect x="{fx + 16.5}" y="{fy + fh - 48.5}" width="{fw - 33}" height="32" fill="{theme.paper}" '
+                    f'stroke="{theme.ink}"/>'
+                    + text(fx + 32, fy + fh - 28, "LINKS BELOW ↓", "m", fill=theme.ink, size=10, letter_spacing="1.6"))
+        rules.append(box(fx, fy, fw, fh, theme.ink))
     body.append(f'<g class="rule">{"".join(rules)}</g>')
     desc = "; ".join(f"{p['name']}: {p['blurb']}" for p in projects)
     return document("".join(body), W, H, title="Selected work", desc=desc, css=CSS, defs=patterns(theme))

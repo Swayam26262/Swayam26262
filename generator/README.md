@@ -16,8 +16,10 @@ GITHUB_TOKEN=... python generator/build.py --live   # refresh live data first
 python -m unittest discover -s generator/tests
 ```
 
-Output goes to `assets/` as `<card>-dark.svg` and `<card>-light.svg`. The
-README picks one with `<picture>` and `prefers-color-scheme`.
+Output goes to `assets/` as `<card>-dark.svg` and `<card>-light.svg`, plus a
+408px single-column layout of every sheet in `assets/mobile/`. The README picks
+one with `<picture>`: phone layouts below a 600px viewport, then dark or light
+by `prefers-color-scheme`.
 
 ## What's where
 
@@ -25,16 +27,21 @@ README picks one with `<picture>` and `prefers-color-scheme`.
 | --- | --- |
 | `profile.toml` | All the words: taglines, terminal lines, impact numbers, timeline, stack, projects, links |
 | `build.py` | Renders every card in both themes |
-| `cards/` | One module per sheet: hero, buttons, about, impact, journey, stack, projects, telemetry, footer |
+| `cards/` | One module per sheet: hero, buttons, about, impact, journey, currently, stack, projects, telemetry, footer |
 | `core/design.py` | The design system: 8pt grid, hard 1px rules, solid offset block shadows, hatch/dot textures |
 | `core/` | Also fonts (subset per SVG, embedded as WOFF2), flat themes, icons, typing and odometer animations |
 | `live.py` | GitHub GraphQL + LeetCode fetchers; results are cached in `data/live.json` |
 | `connect4/` | The README Connect Four game: engine, AI, board art and the workflow runner |
 
-The look is deliberately flat: paper, ink and one signal orange, no gradients,
-no glows, no rounded pills. Display type is Instrument Serif, text is
+The look is deliberately flat: paper, ink, a signal orange and a quiet teal, no
+gradients, no glows, no rounded pills. Display type is Instrument Serif, text is
 Instrument Sans, utilities are JetBrains Mono, and every box, padding and gap
-sits on an 8px grid.
+sits on an 8px grid. Every text color clears WCAG AA on the surface it sits on.
+
+The profile leads with full-stack work; applied AI stays but sits in the back.
+In `profile.toml`, a label, tag or spec row starting with `+` is drawn in the
+secondary teal, and `kind = "ai"` does the same for impact stats and timeline
+rows. The `[currently]` items are meant to change often: keep them true.
 
 The projects bento shows the first six `[[projects]]`; keep the text links under
 it in the README in sync when you change them.

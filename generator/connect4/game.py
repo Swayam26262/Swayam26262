@@ -195,17 +195,27 @@ def button_svg(col: int, theme: Theme, full: bool) -> str:
     return document(body, w, h, title=f"Drop a disc in column {col + 1}", css=BUTTON_CSS)
 
 
-def header_svg(theme: Theme) -> str:
-    """§07 section header for the game, matching the other sheets."""
-    from core.design import W, strip
-    H = 40 + 96 + SHADOW
-    body = (card(W, H, theme) + strip(0, 0, W - SHADOW, "§07", "Play — humans vs. machine", "Connect Four", theme)
-            + text(32, 40 + 56, "One shared game.", "sr", fill=theme.ink, size=40)
-            + text(32 + _serif_width("One shared game. ", 40), 40 + 56, "You vs. my AI.", "si", fill=theme.accent, size=40)
-            + text(W - SHADOW - 24, 40 + 52, "PICK A COLUMN → PRESS CREATE ON THE ISSUE", "m", fill=theme.muted,
-                   size=9.5, anchor="end", letter_spacing="1.2")
-            + text(W - SHADOW - 24, 40 + 72, "THE AI REPLIES IN ABOUT A MINUTE", "m", fill=theme.muted,
-                   size=9.5, anchor="end", letter_spacing="1.2"))
+def header_svg(theme: Theme, mobile: bool = False) -> str:
+    """§08 section header for the game, matching the other sheets."""
+    from core.design import canvas, strip
+    W = canvas(mobile)
+    sheet_w = W - SHADOW
+    lines = ("PICK A COLUMN → PRESS CREATE ON THE ISSUE", "THE AI REPLIES IN ABOUT A MINUTE")
+    if mobile:
+        H = 40 + 152 + SHADOW
+        body = (card(W, H, theme) + strip(0, 0, sheet_w, "§08", "Play", "Connect Four", theme)
+                + text(24, 40 + 48, "One shared game.", "sr", fill=theme.ink, size=36)
+                + text(24, 40 + 88, "You vs. my AI.", "si", fill=theme.accent, size=36)
+                + "".join(text(24, 40 + 116 + i * 16, line, "m", fill=theme.muted, size=9, letter_spacing="1.2")
+                          for i, line in enumerate(lines)))
+    else:
+        H = 40 + 96 + SHADOW
+        body = (card(W, H, theme) + strip(0, 0, sheet_w, "§08", "Play — humans vs. machine", "Connect Four", theme)
+                + text(32, 40 + 56, "One shared game.", "sr", fill=theme.ink, size=40)
+                + text(32 + _serif_width("One shared game. ", 40), 40 + 56, "You vs. my AI.", "si", fill=theme.accent,
+                       size=40)
+                + "".join(text(sheet_w - 24, 40 + 52 + i * 20, line, "m", fill=theme.muted, size=9.5, anchor="end",
+                               letter_spacing="1.2") for i, line in enumerate(lines)))
     return document(body, W, H, title="Play Connect Four against my AI",
                     desc="Everyone on GitHub plays one shared game of Connect Four against my AI.", css=BASE)
 
@@ -225,6 +235,7 @@ def write_assets(state: dict) -> list[Path]:
     files = {}
     for theme in THEMES:
         files[f"header-{theme.name}.svg"] = header_svg(theme)
+        files[f"header-mobile-{theme.name}.svg"] = header_svg(theme, mobile=True)
         for col in range(COLS):
             for full in (False, True):
                 files[f"col-{col + 1}{'-full' if full else ''}-{theme.name}.svg"] = button_svg(col, theme, full)
@@ -239,10 +250,25 @@ def write_assets(state: dict) -> list[Path]:
 
 # ---- README --------------------------------------------------------------
 
-def picture(dark: str, light: str, alt: str, **attrs) -> str:
+PHONE = "(max-width: 600px)"
+BOARD_PCT = 52  # board width as a share of the README column; keys scale with it so they stay aligned
+
+
+def picture(dark: str, light: str, alt: str, *, mobile_dark: str | None = None, mobile_light: str | None = None,
+            **attrs) -> str:
     extra = "".join(f' {k}="{v}"' for k, v in attrs.items())
-    return (f'<picture><source media="(prefers-color-scheme: dark)" srcset="{dark}">'
+    phone = ""
+    if mobile_dark and mobile_light:
+        phone = (f'<source media="{PHONE} and (prefers-color-scheme: dark)" srcset="{mobile_dark}">'
+                 f'<source media="{PHONE}" srcset="{mobile_light}">')
+    return (f'<picture>{phone}<source media="(prefers-color-scheme: dark)" srcset="{dark}">'
             f'<img src="{light}"{extra} alt="{alt}"></picture>')
+
+
+def pct(px: float) -> str:
+    """Width of `px` board pixels as a percentage of the README column."""
+    board_px = COLS * CELL + 2 * PAD + SHADOW
+    return f"{BOARD_PCT * px / board_px:.3f}".rstrip("0").rstrip(".") + "%"
 
 
 def issue_url(repo: str, col: int) -> str:
@@ -282,13 +308,15 @@ def readme_section(state: dict, repo: str) -> str:
         suffix = "-full" if full else ""
         img = picture(f"assets/connect4/col-{c + 1}{suffix}-dark.svg", f"assets/connect4/col-{c + 1}{suffix}-light.svg",
                       f"Column {c + 1} is full" if full else f"Drop a disc in column {c + 1}",
-                      width=CELL + (PAD if c == 0 else 0))
+                      width=pct(CELL + (PAD if c == 0 else 0)))
         keys.append(img if full else f'<a href="{issue_url(repo, c)}">{img}</a>')
     header = picture("assets/connect4/header-dark.svg", "assets/connect4/header-light.svg",
-                     "Section 07, play: one shared game of Connect Four against my AI", width="100%")
+                     "Section 08, play: one shared game of Connect Four against my AI", width="100%",
+                     mobile_dark="assets/connect4/header-mobile-dark.svg",
+                     mobile_light="assets/connect4/header-mobile-light.svg")
     board_img = picture(f"assets/connect4/{board_name(state, THEMES[0])}",
                         f"assets/connect4/{board_name(state, THEMES[1])}",
-                        f"Connect Four board, game {game}", width=COLS * CELL + 2 * PAD + SHADOW)
+                        f"Connect Four board, game {game}", width=f"{BOARD_PCT}%")
     lines = [START, header, "", f"<p>{headline}</p>", f'<p>{"".join(keys)}<br>{board_img}</p>']
     last = state.get("last")
     if last:

@@ -31,12 +31,34 @@ class SvgTest(unittest.TestCase):
         sample = {}  # no live data: cards must still render (placeholders)
         for name in build.CARDS:
             render = build.renderer(name)
-            for theme in THEMES:
-                result = render(profile, theme, sample, None)
-                outputs = result if isinstance(result, dict) else {name: result}
-                for stem, svg in outputs.items():
-                    with self.subTest(f"{stem}-{theme.name}"):
-                        check(self, stem, svg)
+            for mobile in (False, True) if build.has_mobile(name) else (False,):
+                for theme in THEMES:
+                    result = render(profile, theme, sample, None, mobile=mobile)
+                    outputs = result if isinstance(result, dict) else {name: result}
+                    for stem, svg in outputs.items():
+                        with self.subTest(f"{stem}-{theme.name}{'-mobile' if mobile else ''}"):
+                            check(self, stem, svg)
+
+    def test_layouts_sit_on_the_8pt_grid(self):
+        for path in sorted(Path(build.ASSETS).rglob("*.svg")):
+            if path.name.startswith("snake-"):
+                continue
+            root = ET.fromstring(path.read_text())
+            w, h = float(root.get("width")), float(root.get("height"))
+            with self.subTest(path.name):
+                self.assertEqual((w % 8, h % 8), (0, 0), f"{path.name} is {w}x{h}")
+                if path.parent.name == "mobile":
+                    self.assertEqual(w, 408)
+
+    def test_no_gradients_blur_or_rounding(self):
+        for path in sorted(Path(build.ASSETS).rglob("*.svg")):
+            if path.name.startswith("snake-"):
+                continue
+            svg = path.read_text()
+            with self.subTest(path.name):
+                self.assertNotIn("Gradient", svg)
+                self.assertNotIn("feGaussianBlur", svg)
+                self.assertNotRegex(svg, r' r[xy]="')
 
     def test_committed_assets(self):
         assets = Path(build.ASSETS)

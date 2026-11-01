@@ -12,6 +12,7 @@ from core.theme import Theme
 
 H = 40 + SHADOW
 SIZE, LS = 11, 1.6
+MOBILE = False  # small enough to reuse on phones
 
 CSS = BASE + """
 .nudge{animation:nudge 2.4s cubic-bezier(.7,0,.3,1) infinite}
@@ -37,5 +38,5 @@ def button(spec: dict, theme: Theme, primary: bool) -> str:
     return document(body, w + SHADOW, H, title=spec["label"], desc=f"{spec['label']}: {spec['url']}", css=CSS)
 
 
-def render(profile: dict, theme: Theme, live: dict | None = None, today=None) -> dict[str, str]:
+def render(profile: dict, theme: Theme, live: dict | None = None, today=None, mobile: bool = False) -> dict[str, str]:
     return {f"btn-{b['slug']}": button(b, theme, i == 0) for i, b in enumerate(profile["buttons"])}
