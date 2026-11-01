@@ -1,10 +1,25 @@
 {
  "game": 1,
- "last": null,
- "movers": {},
- "moves": [],
- "players": [],
- "processed": [],
+ "last": {
+  "ai": 3,
+  "at": "2026-11-01T07:31:28+00:00",
+  "human": 3,
+  "user": "Swayam26262"
+ },
+ "movers": {
+  "Swayam26262": 1
+ },
+ "moves": [
+  3,
+  3
+ ],
+ "players": [
+  "Swayam26262",
+  null
+ ],
+ "processed": [
+  1
+ ],
  "score": {
   "ai": 0,
   "draws": 0,
