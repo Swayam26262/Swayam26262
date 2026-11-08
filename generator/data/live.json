@@ -1,41 +1,11 @@
 {
  "github": {
-  "active_days_last_year": 175,
+  "active_days_last_year": 174,
   "busiest_day": {
    "count": 24,
    "date": "2026-09-12"
   },
   "calendar": [
-   [
-    [
-     "2025-11-02",
-     1
-    ],
-    [
-     "2025-11-03",
-     1
-    ],
-    [
-     "2025-11-04",
-     2
-    ],
-    [
-     "2025-11-05",
-     2
-    ],
-    [
-     "2025-11-06",
-     7
-    ],
-    [
-     "2025-11-07",
-     5
-    ],
-    [
-     "2025-11-08",
-     4
-    ]
-   ],
    [
     [
      "2025-11-09",
@@ -1595,15 +1565,21 @@
      "2026-11-07",
      0
     ]
+   ],
+   [
+    [
+     "2026-11-08",
+     0
+    ]
    ]
   ],
   "commits_total": 1003,
   "commits_year": 485,
   "contributed_to": 0,
-  "contributions_last_year": 576,
+  "contributions_last_year": 572,
   "contributions_total": 1035,
   "created_at": "2022-09-06T03:59:44Z",
-  "fetched_at": "2026-11-07T10:23:00+00:00",
+  "fetched_at": "2026-11-08T10:30:25+00:00",
   "followers": 7,
   "following": 9,
   "forks": 1,
@@ -1678,13 +1654,13 @@
    120,
    77,
    67,
-   121,
+   117,
    53
   ]
  },
  "leetcode": {
-  "fetched_at": "2026-11-07T10:23:00+00:00",
-  "ranking": 858022,
+  "fetched_at": "2026-11-08T10:30:25+00:00",
+  "ranking": 858338,
   "solved": {
    "All": 204,
    "Easy": 107,
@@ -1692,10 +1668,10 @@
    "Medium": 79
   },
   "totals": {
-   "All": 4101,
+   "All": 4109,
    "Easy": 975,
-   "Hard": 987,
-   "Medium": 2139
+   "Hard": 989,
+   "Medium": 2145
   },
   "username": "SwayamP"
  }
